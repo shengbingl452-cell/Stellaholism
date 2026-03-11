@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Stellaholism</title>
+</head>
+
+<body>
+
+<h1>Welcome to Stellaholism</h1>
+
+<button onclick="loadData()">Test API</button>
+
+<p id="result"></p>
+
+<script>
+async function loadData(){
+    const res = await fetch("/api")
+    const data = await res.json()
+
+    document.getElementById("result").innerText = data.message
+}
+</script>
+
+</body>
+
+</html>
