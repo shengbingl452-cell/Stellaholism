@@ -3,70 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stella OS - Dahyun's Desktop</title>
+    <title>Stella OS | Digital Collection</title>
     <style>
         :root {
-            --win-pink: #FFB7C5;
-            --win-hotpink: #FF007F;
-            --win-gray: #c2c2c2;
-            --win-shadow: #808080;
-            --win-highlight: #ffffff;
-            --win-blue: #000080;
+            --hot-pink: #ff85a1;
+            --soft-pink: #f8c6d1;
+            --retro-blue: #7a7dbd;
+            --win-border: #222;
+            --ipod-gray: #e0e0e0;
         }
 
-        * { box-sizing: border-box; font-family: 'Tahoma', 'Arial', sans-serif; -webkit-font-smoothing: none; }
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: var(--win-pink); }
-
-        /* 像素背景增强 */
-        .desktop-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(var(--win-hotpink) 1px, transparent 1px);
-            background-size: 15px 15px; z-index: -1;
+        body {
+            margin: 0; height: 100vh; background: var(--retro-blue);
+            background-image: 
+                linear-gradient(135deg, rgba(255,133,161,0.4) 0%, transparent 50%),
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 4px);
+            background-size: cover, 4px 4px;
+            font-family: 'Geneva', sans-serif; overflow: hidden;
         }
 
-        /* --- 顶部任务栏 (Taskbar at Top) --- */
-        .taskbar {
-            position: fixed; top: 0; width: 100%; height: 30px;
-            background: var(--win-gray); border-bottom: 2px solid var(--win-shadow);
-            display: flex; align-items: center; padding: 2px; z-index: 9999;
+        /* --- 顶部菜单 --- */
+        .top-bar {
+            position: fixed; top: 0; width: 100%; height: 28px;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
+            border-bottom: 1.5px solid var(--win-border);
+            display: flex; align-items: center; padding: 0 15px; font-size: 13px; z-index: 10000;
         }
-        .start-btn {
-            font-weight: bold; display: flex; align-items: center; gap: 5px; height: 24px;
-            border: 2px solid; border-color: var(--win-highlight) var(--win-shadow) var(--win-shadow) var(--win-highlight);
-            padding: 0 8px; cursor: pointer; font-size: 12px;
-        }
-        .start-btn:active { border-color: var(--win-shadow) var(--win-highlight) var(--win-highlight) var(--win-shadow); }
+        .top-menu-item { margin-right: 20px; cursor: pointer; font-weight: bold; }
+        .top-menu-item:hover { color: var(--hot-pink); }
 
-        /* --- 桌面布局 --- */
-        .desktop { padding: 50px 20px 20px 20px; display: flex; flex-direction: column; gap: 20px; height: 100%; }
-        .icon { width: 70px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; }
-        .icon img { width: 32px; height: 32px; image-rendering: pixelated; margin-bottom: 5px; }
-        .icon span { color: white; font-size: 11px; text-shadow: 1px 1px #000; padding: 2px; }
+        /* --- 桌面图标 --- */
+        .desktop-icons { position: absolute; bottom: 40px; left: 30px; display: flex; gap: 30px; }
+        .icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 60px; }
+        .icon img { width: 40px; height: 40px; image-rendering: pixelated; transition: transform 0.1s; }
+        .icon:hover img { transform: scale(1.1); }
+        .icon span { font-size: 11px; color: white; margin-top: 6px; font-weight: bold; text-shadow: 1px 1px 2px #000; }
 
-        /* --- 通用窗口样式 --- */
+        /* --- 通用窗口 --- */
         .window {
-            position: absolute; background: var(--win-gray); border: 2px solid;
-            border-color: var(--win-highlight) var(--win-shadow) var(--win-shadow) var(--win-highlight);
-            padding: 2px; display: none; flex-direction: column; min-width: 200px;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            position: absolute; background: var(--soft-pink); border: 1.5px solid var(--win-border);
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.2); display: none; flex-direction: column;
         }
         .window-header {
-            background: linear-gradient(90deg, var(--win-hotpink), #ff69b4);
-            color: white; padding: 3px 6px; display: flex; justify-content: space-between;
-            align-items: center; font-weight: bold; font-size: 12px; cursor: move;
+            padding: 6px 10px; background: white; border-bottom: 1.5px solid var(--win-border);
+            display: flex; justify-content: space-between; align-items: center; cursor: move; font-size: 11px;
         }
-        .window-controls button {
-            width: 16px; height: 14px; font-size: 9px; background: var(--win-gray);
-            border: 1px solid; border-color: var(--win-highlight) var(--win-shadow) var(--win-shadow) var(--win-highlight);
-            cursor: pointer;
-        }
-        .window-content { background: white; border: 2px inset var(--win-gray); margin: 2px; padding: 10px; }
 
-        /* --- 各窗口特有样式 --- */
-        #chat-window { width: 360px; left: 300px; top: 60px; }
-        #about-window { width: 320px; left: 400px; top: 200px; }
-        #chat-log { height: 200px; overflow-y: auto; font-size: 12px; border: 1px inset; margin-bottom: 5px; padding: 5px; }
-        .about-text { font-size: 13px; line-height: 1.5; color: #333; }
+        /* --- iPod 录音机样式 --- */
+        #win-audio { width: 220px; border-radius: 20px; overflow: hidden; background: var(--ipod-gray); border: 3px solid #333; }
+        .ipod-screen {
+            background: #9aad9a;
+            margin: 15px; height: 100px; border: 2px solid #555;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-family: 'Courier New', monospace; font-size: 12px; color: #1a2e1a;
+        }
+        .ipod-wheel {
+            width: 100px; height: 100px; background: white; border-radius: 50%;
+            margin: 0 auto 20px auto; border: 2px solid #ccc; position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ipod-center { width: 35px; height: 35px; background: #eee; border-radius: 50%; border: 1px solid #ccc; }
+
+        /* --- About 页面按钮 --- */
+        .contact-btn {
+            display: inline-block; margin-top: 15px; padding: 8px 15px;
+            background: var(--hot-pink); color: white; border: 1px solid var(--win-border);
+            text-decoration: none; font-size: 12px; font-weight: bold;
+            box-shadow: 3px 3px 0px #333; cursor: pointer;
+        }
+        .contact-btn:hover { background: #ff5e84; transform: translate(-1px, -1px); box-shadow: 4px 4px 0px #333; }
+
+        /* 聊天适配 */
+        .chat-content { background: rgba(255,255,255,0.7); margin: 5px; border: 1px solid #333; padding: 10px; height: auto; max-height: 300px; overflow-y: auto; }
+        .chat-avatar { width: 42px; height: 42px; border-radius: 6px; object-fit: cover; border: 1px solid #333; }
+        .chat-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 
         /* --- 视频弹窗与播放器 --- */
         .modal-overlay {
@@ -75,28 +85,28 @@
         }
         .video-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 320px; background: white; border: 3px solid var(--win-hotpink);
+            width: 320px; background: white; border: 3px solid var(--win-border);
             padding: 20px; z-index: 2001; text-align: center;
-            box-shadow: 10px 10px 0px rgba(255, 0, 127, 0.2);
+            box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.2);
         }
         .video-option {
             display: block; width: 100%; padding: 10px; margin: 8px 0;
-            background: #ffe1ea; border: 2px solid var(--win-hotpink);
+            background: #ffe1ea; border: 2px solid var(--win-border);
             font-weight: bold; cursor: pointer;
         }
-        .video-option:hover { background: var(--win-hotpink); color: white; }
+        .video-option:hover { background: var(--hot-pink); color: white; }
 
         #video-player-container {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 3000; justify-content: center; align-items: center;
         }
         .player-window {
-            width: 90%; max-width: 700px; background: var(--win-gray);
-            border: 3px solid var(--win-blue); position: relative;
+            width: 90%; max-width: 700px; background: #fff;
+            border: 3px solid var(--win-border); position: relative;
         }
         #stella-video { width: 100%; display: block; }
         #like-btn {
-            position: absolute; bottom: 10px; right: 10px; background: var(--win-hotpink);
+            position: absolute; bottom: 10px; right: 10px; background: var(--hot-pink);
             color: white; border: none; padding: 6px 12px; border-radius: 16px; cursor: pointer;
             font-weight: bold;
         }
@@ -111,69 +121,83 @@
 </head>
 <body>
 
-    <div class="desktop-bg"></div>
-
-    <div class="taskbar">
-        <div class="start-btn" onclick="alert('Stella OS v1.0 - 系统运行良好')">
-            <img src="https://img.icons8.com/color/16/windows-95.png" alt="Start">
-            <span>Start</span>
-        </div>
-        <div style="margin-left:auto; font-size: 12px; padding-right: 10px;" id="clock">12:00 PM</div>
+    <div class="top-bar">
+        <span class="top-menu-item">Stella OS</span>
+        <span class="top-menu-item" onclick="openWin('about')">About Me</span>
+        <span class="top-menu-item">Gallery</span>
+        <div style="margin-left: auto;" id="top-clock">--:-- • MAR 13</div>
     </div>
 
-    <div class="desktop">
-        <div class="icon" onclick="openWindow('chat-window')">
-            <img src="/IMG_4064.JPG" alt="Stella">
-            <span>Messenger</span>
+    <div class="desktop-icons">
+        <div class="icon" onclick="openWin('messenger')">
+            <img src="/IMG_4064.JPG" alt="Chat">
+            <span>Messages</span>
         </div>
         <div class="icon" onclick="window.open('https://c6.y.qq.com/base/fcgi-bin/u?__=nYR9s9FaDfEq')">
-            <img src="https://img.icons8.com/color/48/itunes.png" alt="Music">
-            <span>My Music</span>
+            <img src="https://img.icons8.com/pixel-line/64/000000/music.png" alt="Playlist">
+            <span>Playlist</span>
         </div>
         <div class="icon" onclick="openGuitarMenu()">
-            <img src="/assets/video.png" alt="Video">
+            <img src="/assets/video.png" alt="Videos">
             <span>Stella Live</span>
-        </div>
-        <div class="icon" onclick="openWindow('about-window')">
-            <img src="https://img.icons8.com/color/48/info.png" alt="About">
-            <span>About</span>
         </div>
     </div>
 
-    <div class="window" id="chat-window">
-        <div class="window-header">
-            <span>Stella Chat</span>
-            <div class="window-controls"><button onclick="closeWindow('chat-window')">X</button></div>
+    <div class="window" id="win-messenger" style="left: 400px; top: 100px; width: 320px; display: flex;">
+        <div class="window-header" onmousedown="dragStart(event, 'win-messenger')">
+            <span>MESSENGER</span>
+            <span onclick="closeWin('win-messenger')" style="cursor:pointer">×</span>
         </div>
-        <div class="window-content">
-            <div id="chat-log"><b>Stella:</b> 嘿！欢迎回到 Stella OS~ 💖</div>
-            <div style="display:flex; gap:5px; margin-top: 6px;">
-                <input type="text" id="chat-input" style="flex:1" onkeypress="if(event.keyCode==13) sendMsg()">
-                <button onclick="sendMsg()">Send</button>
+        <div class="chat-content">
+            <div class="chat-header-row">
+                <img src="/assets/video.png" class="chat-avatar" alt="Stella">
+                <div style="font-size: 12px; font-weight: bold;">Stella</div>
+            </div>
+            <div id="chat-box" style="font-size: 12px;"><b>Stella:</b> 嘿！你的专属 iPod 已经上线了，快去点点看！🎧</div>
+            <div style="margin-top:10px; display:flex; gap:5px;">
+                <input type="text" id="chat-in" style="flex:1; border:1px solid #333;" onkeypress="if(event.keyCode==13) send()">
+                <button onclick="send()" style="border:1px solid #333; background:#fff; font-size:11px;">Send</button>
             </div>
         </div>
     </div>
 
-    <div class="window" id="about-window">
-        <div class="window-header">
-            <span>About This Site</span>
-            <div class="window-controls"><button onclick="closeWindow('about-window')">X</button></div>
+    <div class="window" id="win-audio" style="left: 100px; top: 120px;">
+        <div class="window-header" onmousedown="dragStart(event, 'win-audio')" style="background: none; border:none;">
+            <span>iPod</span>
+            <span onclick="closeWin('win-audio')" style="cursor:pointer">×</span>
         </div>
-        <div class="window-content about-text">
-            <p><b>Author:</b> Stella</p>
-            <p><b>Description:</b><br>这是一个基于 Y2K 风格打造的 Stella 个人主页，致敬 2000 年代的数字美学。</p>
-            <hr>
-            <p><b>Special Thanks:</b></p>
-            <ul>
-                <li>Dahyun (Stella) - 灵感来源</li>
-                <li>DeepSeek - AI 后端支持</li>
-            </ul>
+        <div class="ipod-screen">
+            <div style="font-weight: bold;">Now Playing</div>
+            <div style="margin: 5px 0;">stella_voice.mp3</div>
+            <div style="width: 80%; height: 4px; background: #333; margin-top:10px;"></div>
+        </div>
+        <div class="ipod-wheel">
+            <div style="position:absolute; top:5px; font-size:10px; font-weight:bold; color:#999;">MENU</div>
+            <div class="ipod-center"></div>
+        </div>
+        <div style="padding: 0 15px 15px 15px;">
+            <audio controls style="width: 100%; height: 30px;">
+                <source src="你的SUPABASE链接.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </div>
+
+    <div class="window" id="win-about" style="left: 200px; top: 150px; width: 320px;">
+        <div class="window-header" onmousedown="dragStart(event, 'win-about')">
+            <span>ABOUT AUTHOR</span>
+            <span onclick="closeWin('win-about')" style="cursor:pointer">×</span>
+        </div>
+        <div style="padding: 15px; background: white; margin: 5px; border: 1px solid #333;">
+            <p style="font-size: 13px; margin: 0;"><b>Hi, 我是网站作者!</b></p>
+            <p style="font-size: 12px; color: #555; line-height: 1.5;">这是我为 Stella 打造的复古数字空间。感谢每一位访问这里的你。</p>
+            <p style="font-size: 11px; color: #888;">Thanks to: DeepSeek, Stella, and Y2K Lovers.</p>
+            <a href="mailto:yourname@example.com" class="contact-btn">📫 联系我 / Contact Me</a>
         </div>
     </div>
 
     <div class="modal-overlay" id="modal-overlay" onclick="closeGuitarMenu()"></div>
     <div class="video-modal" id="guitar-menu">
-        <h3 style="color: var(--win-hotpink); margin: 0 0 10px;">🎸 Stella Live</h3>
+        <h3 style="color: #111; margin: 0 0 10px;">🎸 Stella Live</h3>
         <button class="video-option" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/32142002782-1-192.mp4', 'Sparks')">✨ Sparks</button>
         <button class="video-option" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/25874732599-1-192.mp4', 'My Love Mine All Mine')">🌙 My Love Mine All Mine</button>
         <div style="margin-top: 10px; font-size: 12px; cursor: pointer;" onclick="closeGuitarMenu()">[ 取消 ]</div>
@@ -183,9 +207,7 @@
         <div class="player-window" onclick="event.stopPropagation()">
             <div class="window-header" style="cursor: default;">
                 <span id="video-title">Stella Player</span>
-                <div class="window-controls">
-                    <button onclick="stopVideo()">X</button>
-                </div>
+                <span onclick="stopVideo()" style="cursor:pointer">×</span>
             </div>
             <video id="stella-video" controls></video>
             <button id="like-btn" onclick="burstHearts()">💖 给 Stella 点赞</button>
@@ -193,58 +215,21 @@
     </div>
 
     <script>
-        let highestZ = 100;
-
-        function initWindow(id) {
-            const win = document.getElementById(id);
-            const header = win.querySelector('.window-header');
-
-            win.onmousedown = () => {
-                highestZ++;
-                win.style.zIndex = highestZ;
-            };
-
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            header.onmousedown = (e) => {
-                e = e || window.event;
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = () => {
-                    document.onmouseup = null;
-                    document.onmousemove = null;
-                };
-                document.onmousemove = (e) => {
-                    e = e || window.event;
-                    e.preventDefault();
-                    pos1 = pos3 - e.clientX;
-                    pos2 = pos4 - e.clientY;
-                    pos3 = e.clientX;
-                    pos4 = e.clientY;
-                    win.style.top = (win.offsetTop - pos2) + "px";
-                    win.style.left = (win.offsetLeft - pos1) + "px";
-                };
-            };
+        function openWin(id) {
+            const el = document.getElementById('win-' + id);
+            el.style.display = 'flex';
+            document.querySelectorAll('.window').forEach(w => w.style.zIndex = 1);
+            el.style.zIndex = 100;
         }
+        function closeWin(id) { document.getElementById(id).style.display = 'none'; }
 
-        ['chat-window', 'about-window'].forEach(initWindow);
-
-        function openWindow(id) {
-            const win = document.getElementById(id);
-            win.style.display = 'flex';
-            highestZ++;
-            win.style.zIndex = highestZ;
-        }
-
-        function closeWindow(id) { document.getElementById(id).style.display = 'none'; }
-
-        async function sendMsg() {
-            const input = document.getElementById('chat-input');
-            const log = document.getElementById('chat-log');
-            const text = input.value.trim();
-            if (!text) return;
-            log.innerHTML += `<div><b>Me:</b> ${text}</div>`;
-            input.value = '';
+        async function send() {
+            const i = document.getElementById('chat-in');
+            const b = document.getElementById('chat-box');
+            if (!i.value) return;
+            const text = i.value;
+            b.innerHTML += `<div style="margin-top:5px;"><b>Me:</b> ${text}</div>`;
+            i.value = '';
 
             try {
                 const response = await fetch('/api.php', {
@@ -253,18 +238,32 @@
                     body: JSON.stringify({ message: text })
                 });
                 const data = await response.json();
-                log.innerHTML += `<div style="color:var(--win-hotpink)"><b>Stella:</b> ${data.reply}</div>`;
-                log.scrollTop = log.scrollHeight;
+                b.innerHTML += `<div style="margin-top:5px; color:#b1004b;"><b>Stella:</b> ${data.reply}</div>`;
+                b.scrollTop = b.scrollHeight;
             } catch (e) {
-                log.innerHTML += `<div style="color:gray"><i>Connection lost...</i></div>`;
+                b.innerHTML += `<div style="margin-top:5px; color:#666;"><i>Connection lost...</i></div>`;
             }
         }
 
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        function dragStart(e, id) {
+            const el = document.getElementById(id);
+            let p1 = 0, p2 = 0, p3 = e.clientX, p4 = e.clientY;
+            document.onmousemove = (ev) => {
+                p1 = p3 - ev.clientX; p2 = p4 - ev.clientY;
+                p3 = ev.clientX; p4 = ev.clientY;
+                el.style.top = (el.offsetTop - p2) + "px";
+                el.style.left = (el.offsetLeft - p1) + "px";
+            };
+            document.onmouseup = () => document.onmousemove = null;
         }
-        setInterval(updateClock, 1000); updateClock();
+
+        function updateTopClock() {
+            const now = new Date();
+            const t = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const d = now.toLocaleDateString('en-US', { month: 'short', day: '2-digit' }).toUpperCase();
+            document.getElementById('top-clock').innerText = `${t} • ${d}`;
+        }
+        setInterval(updateTopClock, 1000); updateTopClock();
 
         // 视频弹窗与播放
         function openGuitarMenu() {
