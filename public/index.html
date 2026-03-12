@@ -1,108 +1,339 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>Stellaholism</title>
-<style>
-body{
-    font-family: Arial, sans-serif;
-    margin: 24px;
-}
-#chat{
-    max-width: 720px;
-}
-#messages{
-    border: 1px solid #ddd;
-    padding: 12px;
-    height: 360px;
-    overflow-y: auto;
-    background: #fafafa;
-}
-.msg{
-    padding: 8px 10px;
-    margin: 8px 0;
-    border-radius: 8px;
-    max-width: 90%;
-    white-space: pre-wrap;
-}
-.msg.user{
-    background: #dff1ff;
-    margin-left: auto;
-}
-.msg.assistant{
-    background: #e9e9e9;
-}
-#composer{
-    margin-top: 12px;
-    display: flex;
-    gap: 8px;
-}
-#prompt{
-    flex: 1;
-    resize: vertical;
-}
-</style>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dahyun’s Glitzy World | Stella's Pink Room</title>
+    <style>
+        :root {
+            --bratty-pink: #FF007F;
+            --cloudy-pink: #FFF0F5;
+            --y2k-silver: #E5E4E2;
+            --matcha-green: #B7D9A4;
+            --text-dark: #333;
+        }
 
+        /* 基础样式与流体背景 */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(-45deg, #FFF0F5, #FFE4E1, #FFB7C5, #FFF0F5);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+            overflow-x: hidden;
+            transition: filter 0.3s ease; /* 为视力调节镜准备 */
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 视力调节：模糊效果 */
+        body.myopia-mode {
+            filter: blur(4px);
+        }
+
+        /* --- 导航栏 --- */
+        nav {
+            position: fixed;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            width: 55px;
+            height: 55px;
+            background: white;
+            border: 3px solid var(--bratty-pink);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            text-decoration: none;
+            box-shadow: 5px 5px 0px var(--bratty-pink);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-item:hover {
+            transform: scale(1.1) translate(5px, -5px);
+            background: var(--bratty-pink);
+            color: white;
+        }
+
+        /* --- 顶部工具栏 (视力镜) --- */
+        .top-bar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .glasses-btn {
+            background: white;
+            border: 2px solid var(--text-dark);
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 20px;
+            box-shadow: 3px 3px 0px var(--text-dark);
+        }
+
+        /* --- MSN 聊天窗口 --- */
+        .msn-window {
+            max-width: 900px;
+            height: 85vh;
+            margin: 40px auto;
+            background: #f1f1f1;
+            border: 2px solid #0050e6;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 15px 15px 0px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .msn-header {
+            background: linear-gradient(to bottom, #76a9ff 0%, #0050e6 100%);
+            padding: 8px 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .msn-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            background: white;
+        }
+
+        /* 左侧侧边栏 */
+        .msn-sidebar {
+            width: 200px;
+            background: #d6e4ff;
+            padding: 20px;
+            border-right: 1px solid #999;
+            text-align: center;
+        }
+
+        .msn-avatar {
+            width: 100px;
+            height: 100px;
+            border: 4px solid white;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        /* 聊天主区域 */
+        .msn-chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        #chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-image: linear-gradient(rgba(255,192,203,0.1) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255,192,203,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 85%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        .stella-msg {
+            background: #f0f0f0;
+            align-self: flex-start;
+            border: 1px solid #ccc;
+            color: #333;
+        }
+
+        .user-msg {
+            background: #e1f5fe;
+            align-self: flex-end;
+            margin-left: auto;
+            border: 1px solid #b3e5fc;
+        }
+
+        /* 输入区 */
+        .msn-input-zone {
+            padding: 15px;
+            border-top: 1px solid #ccc;
+            display: flex;
+            gap: 10px;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #999;
+            outline: none;
+        }
+
+        #send-btn {
+            padding: 5px 20px;
+            background: #eee;
+            border: 1px solid #999;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #send-btn:hover { background: #ddd; }
+
+        /* 特效：Emoji 掉落 */
+        .falling-emoji {
+            position: fixed;
+            top: -50px;
+            font-size: 24px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
 <body>
 
-<h1>Welcome to Stellaholism</h1>
-
-<div id="chat">
-    <div id="messages"></div>
-    <div id="composer">
-        <textarea id="prompt" rows="4" placeholder="Type your message..."></textarea>
-        <button id="sendBtn" onclick="sendMessage()">Send</button>
+    <div class="top-bar">
+        <button class="glasses-btn" onclick="toggleVision()" title="视力调节镜">👓</button>
     </div>
-</div>
 
-<script>
-const messagesEl = document.getElementById("messages")
-const conversation = []
+    <nav>
+        <a href="#" class="nav-item">🎸</a>
+        <a href="#" class="nav-item">❄️</a>
+        <a href="#" class="nav-item">🎧</a>
+    </nav>
 
-function appendMessage(role, text){
-    const el = document.createElement("div")
-    el.className = `msg ${role}`
-    el.innerText = text
-    messagesEl.appendChild(el)
-    messagesEl.scrollTop = messagesEl.scrollHeight
-}
+    <div class="msn-window">
+        <div class="msn-header">
+            <span>(Online) Stella - Dahyun's Pink Room</span>
+            <div style="display: flex; gap: 5px;">
+                <span>—</span><span>❐</span><span style="background:red; padding: 0 5px;">X</span>
+            </div>
+        </div>
+        <div class="msn-body">
+            <aside class="msn-sidebar">
+                <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Dahyun" alt="Avatar" class="msn-avatar">
+                <p style="font-weight: bold; color: #0050e6;">Stella</p>
+                <p style="font-size: 11px; color: #666;">"Listening to Taylor Swift..."</p>
+            </aside>
+            <main class="msn-chat-area">
+                <div id="chat-history">
+                    <div class="message stella-msg"><b>Stella says:</b><br>Hii! 你终于来啦~ ✨ 准备好跟我聊聊温哥华或者抹茶了吗？💖</div>
+                </div>
+                <div class="msn-input-zone">
+                    <input type="text" id="user-input" placeholder="输入消息..." onkeypress="if(event.keyCode==13) handleSend()">
+                    <button id="send-btn" onclick="handleSend()">发送</button>
+                </div>
+            </main>
+        </div>
+    </div>
 
-async function sendMessage(){
-    const btn = document.getElementById("sendBtn")
-    const promptEl = document.getElementById("prompt")
-    const content = promptEl.value.trim()
-    if (!content) return
+    <script>
+        // 这里的 URL 替换为你部署在 Render 后的后端地址
+        const API_ENDPOINT = 'https://YOUR_RENDER_APP_NAME.onrender.com/api/chat';
 
-    conversation.push({ role: "user", content })
-    appendMessage("user", content)
-    promptEl.value = ""
-    btn.disabled = true
+        async function handleSend() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if (!text) return;
 
-    try {
-        const res = await fetch("/api",{
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ messages: conversation })
-        })
-        if (!res.ok) {
-            throw new Error(`Request failed: ${res.status}`)
+            // 1. 显示用户消息
+            appendMessage('Me', text, 'user-msg');
+            input.value = '';
+
+            // 2. 特殊彩蛋触发
+            checkEasterEggs(text.toLowerCase());
+
+            // 3. 调用后端 API
+            showTyping(true);
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await response.json();
+                showTyping(false);
+                appendMessage('Stella', data.reply, 'stella-msg');
+            } catch (error) {
+                showTyping(false);
+                appendMessage('System', '哎呀，网络被魔法干扰了... 📡', 'stella-msg');
+            }
         }
-        const data = await res.json()
-        if (data.error) throw new Error(data.error)
-        const reply = data.reply || "No response."
-        conversation.push({ role: "assistant", content: reply })
-        appendMessage("assistant", reply)
-    } catch (err) {
-        appendMessage("assistant", "Request failed. Please try again.")
-        console.error(err)
-    } finally {
-        btn.disabled = false
-    }
-}
-</script>
 
+        function appendMessage(sender, text, className) {
+            const history = document.getElementById('chat-history');
+            const div = document.createElement('div');
+            div.className = `message ${className}`;
+            div.innerHTML = `<b>${sender}:</b><br>${text}`;
+            history.appendChild(div);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        function showTyping(isTyping) {
+            const id = 'typing-indicator';
+            if (isTyping) {
+                const history = document.getElementById('chat-history');
+                const div = document.createElement('div');
+                div.id = id;
+                div.className = 'message stella-msg';
+                div.innerText = 'Stella 正在输入... ✨';
+                history.appendChild(div);
+            } else {
+                const el = document.getElementById(id);
+                if (el) el.remove();
+            }
+        }
+
+        function checkEasterEggs(text) {
+            if (text.includes('cupcake')) dropEmojis('🧁');
+            if (text.includes('star')) dropEmojis('✨');
+            if (text.includes('canada')) {
+                document.body.style.background = "linear-gradient(45deg, #FFB7C5, #FFF)";
+            }
+        }
+
+        function dropEmojis(emoji) {
+            for (let i = 0; i < 15; i++) {
+                const el = document.createElement('div');
+                el.className = 'falling-emoji';
+                el.innerText = emoji;
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 4000);
+            }
+        }
+
+        // 视力调节镜切换
+        function toggleVision() {
+            document.body.classList.toggle('myopia-mode');
+        }
+    </script>
 </body>
-
 </html>
