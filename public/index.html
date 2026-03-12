@@ -254,8 +254,8 @@
     </div>
 
     <script>
-        // 这里的 URL 替换为你部署在 Render 后的后端地址
-        const API_ENDPOINT = 'https://YOUR_RENDER_APP_NAME.onrender.com/api/chat';
+        // 同域名调用 PHP 接口
+        const API_ENDPOINT = '/api.php';
 
         async function handleSend() {
             const input = document.getElementById('user-input');
