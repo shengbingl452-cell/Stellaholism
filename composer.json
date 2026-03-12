@@ -1,0 +1,7 @@
+{
+    "name": "stella-ai-web",
+    "description": "PHP backend for Stella AI",
+    "require": {
+        "php": "^8.2"
+    }
+}
