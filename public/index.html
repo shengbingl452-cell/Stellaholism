@@ -250,11 +250,107 @@ body.myopia-mode {
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
         @keyframes heartFly { 
             0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-200px) opacity: 0; }
+            100% { transform: translateY(-200px); opacity: 0; }
+        }
+
+        /* --- 终极 Y2K 风格背景重塑 --- */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0D0D10;
+            font-family: 'Press Start 2P', 'MS Sans Serif', 'Tahoma', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            color: var(--text-dark);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 15% 25%, rgba(255, 0, 127, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(0, 80, 230, 0.25) 0%, transparent 40%),
+                linear-gradient(160deg, #FF69B4 0%, #8A2BE2 50%, #00FFFF 100%);
+            background-size: 300% 300%;
+            animation: y2kGradientAnimation 20s ease infinite alternate;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        @keyframes y2kGradientAnimation {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px),
+                repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px);
+            background-size: 15px 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            animation: y2kGridFlicker 3s infinite alternate;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes y2kGridFlicker {
+            0% { opacity: 0.8; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.8; }
+        }
+
+        #y2k-shapes {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .y2k-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(2px);
+            animation: bubbleFloat 20s linear infinite;
+        }
+
+        @keyframes bubbleFloat {
+            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.6; }
+            25% { transform: translateY(-100px) translateX(50px) scale(1.1); opacity: 0.7; }
+            50% { transform: translateY(-200px) translateX(-50px) scale(0.9); opacity: 0.5; }
+            75% { transform: translateY(-300px) translateX(100px) scale(1.2); opacity: 0.8; }
+            100% { transform: translateY(-400px) translateX(0) scale(1); opacity: 0.6; }
+        }
+
+        body.myopia-mode {
+            filter: blur(8px) saturate(2) contrast(0.7);
+            background-color: rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
+
+    <div class="y2k-sticker" style="top: 10%; left: 5%; font-size: 50px;">✨</div>
+    <div class="y2k-sticker" style="top: 70%; left: 85%; font-size: 40px; animation-delay: 1s;">🍒</div>
+    <div class="y2k-sticker" style="top: 20%; left: 90%; font-size: 60px; animation-delay: 2s;">💿</div>
+    <div class="y2k-sticker" style="top: 80%; left: 10%; font-size: 45px; animation-delay: 3s;">🦋</div>
+    <div class="y2k-sticker" style="top: 40%; left: 80%; font-size: 30px; animation-delay: 4s;">☁️</div>
+
+    <div id="y2k-shapes">
+        <div class="y2k-bubble" style="width: 150px; height: 150px; top: 10%; left: 10%;"></div>
+        <div class="y2k-bubble" style="width: 80px; height: 80px; top: 50%; left: 70%; animation-delay: 5s;"></div>
+        <div class="y2k-bubble" style="width: 120px; height: 120px; top: 80%; left: 30%; animation-delay: 10s;"></div>
+        <div class="y2k-bubble" style="width: 90px; height: 90px; top: 30%; left: 40%; animation-delay: 15s;"></div>
+    </div>
 
     <div style="position:fixed; top:20px; right:20px; z-index:1000;">
         <button onclick="toggleVision()" style="background:white; border:2px solid #333; padding:8px; border-radius:50%; cursor:pointer;">👓</button>
