@@ -163,54 +163,53 @@
             background-image: radial-gradient(#ffc0cb 1px, transparent 1px);
             background-size: 20px 20px;
         }
-        /* 聊天内容区域整体调整 */
+/* 聊天内容区域整体调整 */
 #messages {
     display: flex;
     flex-direction: column;
-    gap: 8px; /* 紧凑一点更有聊天记录的感觉 */
+    gap: 8px;
     padding: 15px;
 }
 
-/* 统一的消息包装器：全部靠左 */
-.msg-wrapper {
-    display: block; /* 取消 flex 居中 */
-    text-align: left; 
+/* 聊天框内的每一行消息包装器 */
+.msg-row {
+    display: flex;
+    align-items: flex-start;
     margin-bottom: 5px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
-/* 消息文字基础样式 */
-.msg {
-    display: inline-block;
-    max-width: 90%;
-    padding: 4px 8px;
-    font-size: 13px;
-    line-height: 1.4;
-    word-break: break-all;
-}
-
-/* Stella 的消息样式：粉色文字 */
-.msg-wrapper.stella .msg-author {
-    color: var(--hot-pink); /* 名字是粉色的 */
+/* 名字的基础样式 (Stella: 或 Me:) */
+.msg-author {
     font-weight: bold;
-}
-.msg-wrapper.stella .msg-text {
-    color: #ff4d6d; /* Stella 回复的文字换成深粉色 */
-}
-
-/* 用户消息样式：蓝色文字（模拟 MSN 默认色） */
-.msg-wrapper.user .msg-author {
-    color: #3a76f0; 
-    font-weight: bold;
-}
-.msg-wrapper.user .msg-text {
-    color: #333; /* 用户的字保持深灰色 */
+    margin-right: 8px;
+    text-shadow: none;
 }
 
-/* 移除气泡背景，还原纯文字聊天感 */
-.msg {
+/* 时间戳样式：灰色、等宽字体感 */
+.msg-time {
+    color: #999;
+    font-size: 12px;
+    margin-right: 8px;
+    font-family: "Courier New", monospace;
+}
+
+/* --- Stella 的专属粉色样式 --- */
+.stella-msg .msg-author { color: var(--hot-pink); }
+.stella-msg .msg-content { color: #ff4d6d; }
+
+/* --- 用户的专属蓝色样式 --- */
+.user-msg .msg-author { color: #3a76f0; }
+.user-msg .msg-content { color: #333; }
+
+/* 清除之前可能存在的背景、边框和气泡样式 */
+.msg-content {
     background: transparent !important;
     border: none !important;
-    box-shadow: none !important;
+    padding: 0 !important;
+    display: inline;
 }
 
         .chat-input-area {
@@ -429,17 +428,38 @@
         }
 
         // Chat 发送逻辑（DeepSeek API）
+        function appendMessage(text, sender) {
+            const messagesContainer = document.getElementById('messages');
+            if (!messagesContainer) return;
+
+            const now = new Date();
+            const timeStr = [
+                now.getHours().toString().padStart(2, '0'),
+                now.getMinutes().toString().padStart(2, '0'),
+                now.getSeconds().toString().padStart(2, '0')
+            ].join(':');
+
+            const div = document.createElement('div');
+            const senderClass = (sender === 'stella') ? 'stella-msg' : 'user-msg';
+            div.className = `msg-row ${senderClass}`;
+
+            const name = (sender === 'stella') ? 'Stella' : 'Me';
+            div.innerHTML = `
+                <span class="msg-time">[${timeStr}]</span>
+                <span class="msg-author">${name}:</span>
+                <span class="msg-content">${text}</span>
+            `;
+
+            messagesContainer.appendChild(div);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
         async function sendMessage() {
             const input = document.getElementById('user-input');
-            const list = document.getElementById('messages');
             const text = input.value.trim();
             if (!text) return;
 
-            const userMsg = document.createElement('div');
-            userMsg.className = 'msg user';
-            userMsg.innerText = text;
-            list.appendChild(userMsg);
-            list.scrollTop = list.scrollHeight;
+            appendMessage(text, 'user');
             input.value = '';
 
             if (text.toLowerCase().includes('cupcake')) triggerDrop('🧁');
@@ -452,17 +472,9 @@
                 });
                 const data = await response.json();
                 const reply = data.reply || '...';
-                const botMsg = document.createElement('div');
-                botMsg.className = 'msg stella';
-                botMsg.innerText = reply;
-                list.appendChild(botMsg);
-                list.scrollTop = list.scrollHeight;
+                appendMessage(reply, 'stella');
             } catch (e) {
-                const errMsg = document.createElement('div');
-                errMsg.className = 'msg stella';
-                errMsg.innerText = '连接失败，请稍后再试。';
-                list.appendChild(errMsg);
-                list.scrollTop = list.scrollHeight;
+                appendMessage('连接失败，请稍后再试。', 'stella');
             }
         }
 
