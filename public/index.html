@@ -10,158 +10,194 @@
             --soft-pink: #f8c6d1;
             --retro-blue: #7a7dbd;
             --win-border: #222;
-            --ipod-gray: #e0e0e0;
             --msn-blue: #3a76f0;
             --msn-light-blue: #dce7ff;
+            --ipod-gray: #e0e0e0;
         }
 
-        /* 背景：Poolside 镭射紫粉色点阵 */
+        /* --- 1. 背景与基础样式 --- */
         body {
             margin: 0; height: 100vh; background: var(--retro-blue);
             background-image: 
                 linear-gradient(135deg, rgba(255,133,161,0.4) 0%, transparent 50%),
                 repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 4px);
             background-size: cover, 4px 4px;
-            font-family: 'Geneva', 'Tahoma', sans-serif; overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, sans-serif; overflow: hidden;
         }
 
-        /* 顶部导航栏 */
+        /* --- 2. 顶部导航栏 (带 About 文本) --- */
         .top-bar {
             position: fixed; top: 0; width: 100%; height: 28px;
             background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
             border-bottom: 1.5px solid var(--win-border);
             display: flex; align-items: center; padding: 0 15px; font-size: 13px; z-index: 10000;
         }
-        .top-menu-item { margin-right: 20px; cursor: pointer; font-weight: bold; }
+        .top-menu-item { margin-right: 20px; cursor: pointer; font-weight: bold; color: #333; text-decoration: none; }
         .top-menu-item:hover { color: var(--hot-pink); }
 
-        /* 桌面图标 */
+        /* --- 3. 桌面图标 --- */
         .desktop-icons { position: absolute; bottom: 40px; left: 30px; display: flex; gap: 30px; }
         .icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 60px; }
-        .icon img { width: 40px; height: 40px; image-rendering: pixelated; transition: transform 0.1s; }
+        .icon img { width: 42px; height: 42px; image-rendering: pixelated; }
         .icon span { font-size: 11px; color: white; margin-top: 6px; font-weight: bold; text-shadow: 1px 1px 2px #000; }
 
-        /* 通用窗口样式 */
+        /* --- 4. 通用窗口插件 --- */
         .window {
             position: absolute; background: var(--soft-pink); border: 1.5px solid var(--win-border);
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.2); display: none; flex-direction: column;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 10;
         }
         .window-header {
             padding: 6px 10px; background: white; border-bottom: 1.5px solid var(--win-border);
             display: flex; justify-content: space-between; align-items: center; cursor: move; font-size: 11px;
         }
 
-        /* --- MSN 风格聊天窗 --- */
-        #win-messenger { width: 600px; }
-        .msn-container { display: flex; background: white; height: 400px; }
-        .msn-sidebar { width: 160px; background: var(--msn-light-blue); border-right: 1px solid #adc5f5; display: flex; flex-direction: column; align-items: center; padding: 15px; }
-        .msn-avatar { width: 90px; height: 90px; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.1); background: #fff; object-fit: cover; }
-        .msn-chat-area { flex: 1; display: flex; flex-direction: column; }
-        #chat-box { flex: 1; padding: 15px; overflow-y: auto; background-image: radial-gradient(#eee 1px, transparent 1px); background-size: 15px 15px; }
-        .chat-input-row { height: 50px; border-top: 1px solid #ccc; display: flex; align-items: center; padding: 0 10px; gap: 8px; }
+        /* --- 5. 重点：MSN 经典布局样式 --- */
+        #win-messenger { width: 620px; }
+        .msn-body { display: flex; background: white; height: 420px; border: 1px solid #777; margin: 2px; }
+        
+        /* MSN 左侧栏 */
+        .msn-left { 
+            width: 170px; background: var(--msn-light-blue); 
+            border-right: 1px solid #adc5f5; display: flex; 
+            flex-direction: column; align-items: center; padding-top: 25px; 
+        }
+        .msn-avatar-box { 
+            width: 100px; height: 100px; border: 3px solid white; 
+            box-shadow: 0 0 8px rgba(0,0,0,0.15); background: #fff; overflow: hidden;
+        }
+        .msn-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* MSN 右侧聊天区 */
+        .msn-right { flex: 1; display: flex; flex-direction: column; }
+        .chat-log { 
+            flex: 1; padding: 15px; overflow-y: auto; 
+            background-image: radial-gradient(#ddd 1px, transparent 1px); 
+            background-size: 16px 16px; /* 还原图中的网格点 */
+        }
+        .chat-input-area { 
+            height: 65px; border-top: 1px solid #ccc; 
+            display: flex; align-items: center; padding: 0 12px; gap: 10px; 
+        }
+        .chat-input-area input { flex: 1; height: 32px; border: 1px solid #adc5f5; padding: 0 8px; }
 
-        /* --- iPod 录音机 --- */
-        #win-audio { width: 220px; border-radius: 20px; background: var(--ipod-gray); border: 3px solid #333; }
-        .ipod-screen { background: #9aad9a; margin: 15px; height: 80px; border: 2px solid #555; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: monospace; font-size: 11px; }
-        .ipod-wheel { width: 90px; height: 90px; background: white; border-radius: 50%; margin: 0 auto 15px auto; border: 2px solid #ccc; position: relative; }
+        /* --- 6. 独立视频播放器 --- */
+        #win-video { width: 500px; background: #000; }
+        .video-wrap { position: relative; width: 100%; padding-bottom: 56.25%; }
+        .video-wrap video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        /* --- 视频窗口 (独立生成) --- */
-        #win-video { width: 480px; background: #000; }
-        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; }
-        video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        /* --- 7. 关于作者与 iPod --- */
+        #win-audio { width: 220px; border-radius: 20px; background: var(--ipod-gray); border: 2.5px solid #333; overflow: hidden; }
+        .ipod-screen { background: #9aad9a; margin: 12px; height: 85px; border: 2px solid #555; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: monospace; font-size: 11px; }
+        .contact-btn { display: inline-block; margin-top: 10px; padding: 8px 15px; background: var(--hot-pink); color: white; border: 1.5px solid var(--win-border); text-decoration: none; font-size: 11px; font-weight: bold; box-shadow: 3px 3px 0px #333; }
 
         /* 动画修复 */
         @keyframes heartFly {
             0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-200px) opacity: 0; }
+            100% { transform: translateY(-220px) opacity: 0; }
         }
-        .heart-pop { position: fixed; pointer-events: none; z-index: 9999; animation: heartFly 1s forwards; }
-
-        .contact-btn { display: inline-block; margin-top: 10px; padding: 6px 12px; background: var(--hot-pink); color: white; border: 1.5px solid var(--win-border); text-decoration: none; font-size: 11px; font-weight: bold; box-shadow: 2px 2px 0px #333; }
+        .heart-pop { position: fixed; pointer-events: none; z-index: 9999; animation: heartFly 1s forwards; font-size: 24px; }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
+        <span class="top-menu-item" style="font-size: 16px;"></span>
         <span class="top-menu-item">Stella OS</span>
-        <span class="top-menu-item" onclick="openWin('about')">About Me</span>
-        <div style="margin-left: auto;" id="top-clock">--:-- • MAR 13</div>
+        <span class="top-menu-item" onclick="openWin('about')">About Author</span>
+        <div style="margin-left: auto;" id="clock-display">--:-- • MAR 13</div>
     </div>
 
     <div class="desktop-icons">
-        <div class="icon" onclick="openWin('messenger')"><img src="https://img.icons8.com/pixel-line/64/000000/speech-bubble.png"><span>Messages</span></div>
-        <div class="icon" onclick="openWin('audio')"><img src="https://img.icons8.com/pixel-line/64/000000/ipod.png"><span>Recordings</span></div>
-        <div class="icon" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/32142002782-1-192.mp4', 'Sparks')"><img src="https://img.icons8.com/pixel-line/64/000000/guitar.png"><span>Live 1</span></div>
-        <div class="icon" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/25874732599-1-192.mp4', 'My Love')"><img src="https://img.icons8.com/pixel-line/64/000000/video-playlist.png"><span>Live 2</span></div>
+        <div class="icon" onclick="openWin('messenger')">
+            <img src="https://img.icons8.com/pixel-line/64/000000/speech-bubble.png">
+            <span>Messenger</span>
+        </div>
+        <div class="icon" onclick="openWin('audio')">
+            <img src="https://img.icons8.com/pixel-line/64/000000/ipod.png">
+            <span>Recordings</span>
+        </div>
+        <div class="icon" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/32142002782-1-192.mp4', 'Sparks')">
+            <img src="https://img.icons8.com/pixel-line/64/000000/guitar.png">
+            <span>Live 1</span>
+        </div>
     </div>
 
-    <div class="window" id="win-messenger" style="left: 350px; top: 80px; display: flex;">
+    <div class="window" id="win-messenger" style="left: 380px; top: 80px; display: flex;">
         <div class="window-header" onmousedown="dragStart(event, 'win-messenger')" style="background: var(--msn-blue); color: white;">
             <span>(Online) Stella - Dahyun's Pink Room</span>
-            <span onclick="closeWin('win-messenger')" style="cursor:pointer">[X]</span>
+            <span onclick="closeWin('win-messenger')" style="cursor:pointer; font-weight:bold;">[X]</span>
         </div>
-        <div class="msn-container">
-            <div class="msn-sidebar">
-                <img src="https://img.icons8.com/color/96/avatar.png" class="msn-avatar">
-                <p style="color: #003399; font-weight: bold; margin: 10px 0 2px; font-size: 13px;">Stella</p>
-                <p style="font-size: 10px; color: #666; font-style: italic;">"Playing Guitar... 🎸"</p>
+        <div class="msn-body">
+            <div class="msn-left">
+                <div class="msn-avatar-box">
+                    <img src="https://img.icons8.com/color/144/avatar.png"> </div>
+                <p style="color: #003399; font-weight: bold; margin: 15px 0 2px;">Stella</p>
+                <p style="font-size: 11px; color: #666; font-style: italic;">"Playing Guitar... 🎸"</p>
             </div>
-            <div class="msn-chat-area">
-                <div id="chat-box">
-                    <div style="background: #f0f0f0; border: 1px solid #ddd; padding: 8px; border-radius: 8px; font-size: 12px; max-width: 90%;">
-                        <b>Stella:</b> Hii! 欢迎来到我的房间！点击桌面的吉他图标可以看我的表演哦~ 💖
+            <div class="msn-right">
+                <div class="chat-log" id="msg-log">
+                    <div style="background: #f1f1f1; border: 1px solid #ddd; padding: 10px; border-radius: 12px; font-size: 13px; max-width: 85%; margin-bottom: 10px;">
+                        <b style="color: #333;">Stella:</b><br>
+                        Hii! 想听我弹吉他吗？点击桌面的 🎸 图标哦！或者跟我聊聊天~ 💖
                     </div>
                 </div>
-                <div class="chat-input-row">
-                    <input type="text" id="chat-in" style="flex:1; border: 1px solid #adc5f5; padding: 4px;" onkeypress="if(event.keyCode==13) sendMsg()">
-                    <button onclick="sendMsg()" style="border:1px solid #999; background: #eee; cursor:pointer; font-size: 11px;">发送</button>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input-field" placeholder="说点什么..." onkeypress="if(event.keyCode==13) doSend()">
+                    <button onclick="doSend()" style="padding: 5px 12px; cursor: pointer;">发送</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="window" id="win-audio" style="left: 80px; top: 100px;">
-        <div class="window-header" onmousedown="dragStart(event, 'win-audio')" style="background: none; border:none;">
-            <span>iPod</span>
-            <span onclick="closeWin('win-audio')" style="cursor:pointer">×</span>
-        </div>
-        <div class="ipod-screen">
-            <div style="font-weight: bold;">Now Playing</div>
-            <div style="margin: 5px 0;">stella_voice.mp3</div>
-            <div style="width: 70%; height: 3px; background: #333; margin-top:5px;"></div>
-        </div>
-        <div class="ipod-wheel"><div style="width:30px; height:30px; background:#eee; border-radius:50%; border:1px solid #ccc; position:absolute; top:30px; left:30px;"></div></div>
-        <div style="padding: 10px;"><audio controls style="width: 100%; height: 25px;"><source src="YOUR_AUDIO_URL.mp3" type="audio/mpeg"></audio></div>
-    </div>
-
-    <div class="window" id="win-video" style="left: 450px; top: 200px;">
+    <div class="window" id="win-video" style="left: 450px; top: 180px;">
         <div class="window-header" onmousedown="dragStart(event, 'win-video')" style="background: #ff007f; color: white;">
-            <span id="v-title">Stella Player</span>
-            <span onclick="closeVideo()" style="cursor:pointer">[X]</span>
+            <span id="vid-title">Stella Player</span>
+            <span onclick="stopVid()" style="cursor:pointer; font-weight:bold;">[X]</span>
         </div>
-        <div class="video-container">
-            <video id="v-player" controls></video>
+        <div class="video-wrap">
+            <video id="stella-vid-tag" controls></video>
         </div>
-        <button onclick="burstHearts()" style="background:var(--hot-pink); border:none; color:white; font-size:11px; padding:5px; cursor:pointer;">💖 Like Stella</button>
+        <button onclick="popHearts(event)" style="background: var(--hot-pink); border:none; color:white; padding:8px; cursor:pointer; font-weight:bold;">💖 给 Stella 点赞</button>
     </div>
 
-    <div class="window" id="win-about" style="left: 150px; top: 350px; width: 280px;">
+    <div class="window" id="win-about" style="left: 100px; top: 120px; width: 300px;">
         <div class="window-header" onmousedown="dragStart(event, 'win-about')">
             <span>ABOUT AUTHOR</span>
-            <span onclick="closeWin('win-about')" style="cursor:pointer">×</span>
+            <span onclick="closeWin('win-about')" style="cursor:pointer">[X]</span>
         </div>
-        <div style="padding: 12px; background: white; margin: 3px; border: 1.5px solid #333; font-size: 12px;">
-            <p><b>Author: [你的名字]</b></p>
-            <p>基于 Y2K 美学打造。感谢支持！</p>
+        <div style="padding: 20px; background: white; margin: 4px; border: 1px solid #333; font-size: 13px;">
+            <p><b>作者: [你的名字]</b></p>
+            <p>欢迎来到我的 Stella 收藏馆。这里记录了每一个闪光的瞬间。</p>
+            <hr>
+            <p><b>感谢名单:</b><br>DeepSeek, Stella, 以及正在看的你。</p>
             <a href="https://weibo.com/u/6394278497" class="contact-btn" target="_blank">📫 联系我 / Contact Me</a>
         </div>
     </div>
 
+    <div class="window" id="win-audio" style="left: 50px; top: 320px;">
+        <div class="window-header" onmousedown="dragStart(event, 'win-audio')" style="background:transparent; border:none;">
+            <span>iPod</span>
+            <span onclick="closeWin('win-audio')" style="cursor:pointer">×</span>
+        </div>
+        <div class="ipod-screen">
+            <div style="font-weight:bold">Recorder</div>
+            <div style="margin-top:5px">stella_voice.wav</div>
+            <div style="width: 70%; height: 3px; background:#333; margin-top:8px;"></div>
+        </div>
+        <div style="height: 100px; display:flex; align-items:center; justify-content:center;">
+            <div style="width:80px; height:80px; background:white; border-radius:50%; border:2px solid #ccc; position:relative;">
+                <div style="width:30px; height:30px; background:#eee; border-radius:50%; border:1px solid #ccc; position:absolute; top:25px; left:25px;"></div>
+            </div>
+        </div>
+        <div style="padding: 10px;"><audio controls style="width:100%; height:25px;"><source src="你的音频链接"></audio></div>
+    </div>
+
     <script>
+        // 窗口管理：显示与置顶
         function openWin(id) {
             const el = document.getElementById('win-' + id);
             el.style.display = 'flex';
-            document.querySelectorAll('.window').forEach(w => w.style.zIndex = 1);
+            document.querySelectorAll('.window').forEach(w => w.style.zIndex = 10);
             el.style.zIndex = 100;
         }
         function closeWin(id) { document.getElementById(id).style.display = 'none'; }
@@ -169,30 +205,36 @@
         // 视频播放逻辑
         function playVideo(url, title) {
             const win = document.getElementById('win-video');
-            const player = document.getElementById('v-player');
-            document.getElementById('v-title').innerText = "Playing: " + title;
+            const player = document.getElementById('stella-vid-tag');
+            document.getElementById('vid-title').innerText = "Live: " + title;
             player.src = url;
             win.style.display = 'flex';
             openWin('video');
             player.play();
         }
-        function closeVideo() {
-            const player = document.getElementById('v-player');
+        function stopVid() {
+            const player = document.getElementById('stella-vid-tag');
             player.pause();
             closeWin('win-video');
         }
 
-        // MSN 聊天逻辑
-        function sendMsg() {
-            const i = document.getElementById('chat-in');
-            const b = document.getElementById('chat-box');
-            if(!i.value) return;
-            b.innerHTML += `<div style="text-align:right; margin-top:8px;"><span style="background:#e1ffc7; border:1px solid #b5e68b; padding:5px 10px; border-radius:10px; font-size:12px; display:inline-block;">${i.value}</span></div>`;
-            i.value = '';
-            b.scrollTop = b.scrollHeight;
+        // MSN 聊天发送逻辑
+        function doSend() {
+            const input = document.getElementById('chat-input-field');
+            const log = document.getElementById('msg-log');
+            if(!input.value) return;
+            log.innerHTML += `
+                <div style="text-align: right; margin-bottom: 10px;">
+                    <div style="background: #e1ffc7; border: 1px solid #b5e68b; border-radius: 12px; padding: 8px 12px; display: inline-block; font-size: 13px; text-align: left;">
+                        ${input.value}
+                    </div>
+                </div>
+            `;
+            input.value = '';
+            log.scrollTop = log.scrollHeight;
         }
 
-        // 拖拽
+        // 拖拽功能
         function dragStart(e, id) {
             const el = document.getElementById(id);
             let p1 = 0, p2 = 0, p3 = e.clientX, p4 = e.clientY;
@@ -205,22 +247,24 @@
             document.onmouseup = () => document.onmousemove = null;
         }
 
-        function burstHearts() {
-            for(let i=0; i<8; i++){
+        // 点赞红心
+        function popHearts(e) {
+            for(let i=0; i<6; i++) {
                 const h = document.createElement('div');
                 h.className = 'heart-pop'; h.innerText = '💖';
-                h.style.left = event.clientX + (Math.random()*100-50) + 'px';
-                h.style.top = event.clientY + 'px';
+                h.style.left = e.clientX + (Math.random()*60-30) + 'px';
+                h.style.top = e.clientY + 'px';
                 document.body.appendChild(h);
                 setTimeout(() => h.remove(), 1000);
             }
         }
 
-        function clock() {
+        // 时钟
+        function updateClock() {
             const now = new Date();
-            document.getElementById('top-clock').innerText = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + " • MAR 13";
+            document.getElementById('clock-display').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + " • MAR 13";
         }
-        setInterval(clock, 1000); clock();
+        setInterval(updateClock, 1000); updateClock();
     </script>
 </body>
 </html>
