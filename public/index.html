@@ -163,32 +163,55 @@
             background-image: radial-gradient(#ffc0cb 1px, transparent 1px);
             background-size: 20px 20px;
         }
-        #messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .msg {
-            max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 15px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .msg.stella {
-            align-self: flex-start;
-            background: white;
-            border: 1px solid var(--bratty-pink);
-            color: #333;
-        }
-        .msg.user {
-            align-self: flex-end;
-            background: var(--bratty-pink);
-            color: white;
-        }
+        /* 聊天内容区域整体调整 */
+#messages {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* 紧凑一点更有聊天记录的感觉 */
+    padding: 15px;
+}
+
+/* 统一的消息包装器：全部靠左 */
+.msg-wrapper {
+    display: block; /* 取消 flex 居中 */
+    text-align: left; 
+    margin-bottom: 5px;
+}
+
+/* 消息文字基础样式 */
+.msg {
+    display: inline-block;
+    max-width: 90%;
+    padding: 4px 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    word-break: break-all;
+}
+
+/* Stella 的消息样式：粉色文字 */
+.msg-wrapper.stella .msg-author {
+    color: var(--hot-pink); /* 名字是粉色的 */
+    font-weight: bold;
+}
+.msg-wrapper.stella .msg-text {
+    color: #ff4d6d; /* Stella 回复的文字换成深粉色 */
+}
+
+/* 用户消息样式：蓝色文字（模拟 MSN 默认色） */
+.msg-wrapper.user .msg-author {
+    color: #3a76f0; 
+    font-weight: bold;
+}
+.msg-wrapper.user .msg-text {
+    color: #333; /* 用户的字保持深灰色 */
+}
+
+/* 移除气泡背景，还原纯文字聊天感 */
+.msg {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
 
         .chat-input-area {
             padding: 15px;
@@ -246,7 +269,7 @@
 
         /* --- 7. 关于作者与 iPod --- */
         #win-audio { width: 220px; border-radius: 20px; background: var(--ipod-gray); border: 2.5px solid #333; overflow: hidden; }
-        .ipod-screen { background: #9aad9a; margin: 12px; height: 85px; border: 2px solid #555; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: monospace; font-size: 11px; }
+        .ipod-screen { background: #9aad9a; margin: 12px; height: 85px; border: 2px solid #555; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: "Pixelify Sans", "Zpix", "SimSun", monospace !important; font-size: 11px; }
         .contact-btn { display: inline-block; margin-top: 10px; padding: 8px 15px; background: var(--hot-pink); color: white; border: 1.5px solid var(--win-border); text-decoration: none; font-size: 11px; font-weight: bold; box-shadow: 3px 3px 0px #333; }
 
         /* 动画修复 */
