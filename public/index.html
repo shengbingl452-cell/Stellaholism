@@ -11,18 +11,21 @@
             --retro-blue: #7a7dbd;
             --win-border: #222;
             --ipod-gray: #e0e0e0;
+            --msn-blue: #3a76f0;
+            --msn-light-blue: #dce7ff;
         }
 
+        /* 背景：Poolside 镭射紫粉色点阵 */
         body {
             margin: 0; height: 100vh; background: var(--retro-blue);
             background-image: 
                 linear-gradient(135deg, rgba(255,133,161,0.4) 0%, transparent 50%),
                 repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 4px);
             background-size: cover, 4px 4px;
-            font-family: 'Geneva', sans-serif; overflow: hidden;
+            font-family: 'Geneva', 'Tahoma', sans-serif; overflow: hidden;
         }
 
-        /* --- 顶部菜单 --- */
+        /* 顶部导航栏 */
         .top-bar {
             position: fixed; top: 0; width: 100%; height: 28px;
             background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
@@ -32,14 +35,13 @@
         .top-menu-item { margin-right: 20px; cursor: pointer; font-weight: bold; }
         .top-menu-item:hover { color: var(--hot-pink); }
 
-        /* --- 桌面图标 --- */
+        /* 桌面图标 */
         .desktop-icons { position: absolute; bottom: 40px; left: 30px; display: flex; gap: 30px; }
         .icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 60px; }
         .icon img { width: 40px; height: 40px; image-rendering: pixelated; transition: transform 0.1s; }
-        .icon:hover img { transform: scale(1.1); }
         .icon span { font-size: 11px; color: white; margin-top: 6px; font-weight: bold; text-shadow: 1px 1px 2px #000; }
 
-        /* --- 通用窗口 --- */
+        /* 通用窗口样式 */
         .window {
             position: absolute; background: var(--soft-pink); border: 1.5px solid var(--win-border);
             box-shadow: 6px 6px 0px rgba(0,0,0,0.2); display: none; flex-direction: column;
@@ -49,74 +51,33 @@
             display: flex; justify-content: space-between; align-items: center; cursor: move; font-size: 11px;
         }
 
-        /* --- iPod 录音机样式 --- */
-        #win-audio { width: 220px; border-radius: 20px; overflow: hidden; background: var(--ipod-gray); border: 3px solid #333; }
-        .ipod-screen {
-            background: #9aad9a;
-            margin: 15px; height: 100px; border: 2px solid #555;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-family: 'Courier New', monospace; font-size: 12px; color: #1a2e1a;
-        }
-        .ipod-wheel {
-            width: 100px; height: 100px; background: white; border-radius: 50%;
-            margin: 0 auto 20px auto; border: 2px solid #ccc; position: relative;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .ipod-center { width: 35px; height: 35px; background: #eee; border-radius: 50%; border: 1px solid #ccc; }
+        /* --- MSN 风格聊天窗 --- */
+        #win-messenger { width: 600px; }
+        .msn-container { display: flex; background: white; height: 400px; }
+        .msn-sidebar { width: 160px; background: var(--msn-light-blue); border-right: 1px solid #adc5f5; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .msn-avatar { width: 90px; height: 90px; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.1); background: #fff; object-fit: cover; }
+        .msn-chat-area { flex: 1; display: flex; flex-direction: column; }
+        #chat-box { flex: 1; padding: 15px; overflow-y: auto; background-image: radial-gradient(#eee 1px, transparent 1px); background-size: 15px 15px; }
+        .chat-input-row { height: 50px; border-top: 1px solid #ccc; display: flex; align-items: center; padding: 0 10px; gap: 8px; }
 
-        /* --- About 页面按钮 --- */
-        .contact-btn {
-            display: inline-block; margin-top: 15px; padding: 8px 15px;
-            background: var(--hot-pink); color: white; border: 1px solid var(--win-border);
-            text-decoration: none; font-size: 12px; font-weight: bold;
-            box-shadow: 3px 3px 0px #333; cursor: pointer;
-        }
-        .contact-btn:hover { background: #ff5e84; transform: translate(-1px, -1px); box-shadow: 4px 4px 0px #333; }
+        /* --- iPod 录音机 --- */
+        #win-audio { width: 220px; border-radius: 20px; background: var(--ipod-gray); border: 3px solid #333; }
+        .ipod-screen { background: #9aad9a; margin: 15px; height: 80px; border: 2px solid #555; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: monospace; font-size: 11px; }
+        .ipod-wheel { width: 90px; height: 90px; background: white; border-radius: 50%; margin: 0 auto 15px auto; border: 2px solid #ccc; position: relative; }
 
-        /* 聊天适配 */
-        .chat-content { background: rgba(255,255,255,0.7); margin: 5px; border: 1px solid #333; padding: 10px; height: auto; max-height: 300px; overflow-y: auto; }
-        .chat-avatar { width: 42px; height: 42px; border-radius: 6px; object-fit: cover; border: 1px solid #333; }
-        .chat-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        /* --- 视频窗口 (独立生成) --- */
+        #win-video { width: 480px; background: #000; }
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; }
+        video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        /* --- 视频弹窗与播放器 --- */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 2000;
-        }
-        .video-modal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 320px; background: white; border: 3px solid var(--win-border);
-            padding: 20px; z-index: 2001; text-align: center;
-            box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.2);
-        }
-        .video-option {
-            display: block; width: 100%; padding: 10px; margin: 8px 0;
-            background: #ffe1ea; border: 2px solid var(--win-border);
-            font-weight: bold; cursor: pointer;
-        }
-        .video-option:hover { background: var(--hot-pink); color: white; }
-
-        #video-player-container {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 3000; justify-content: center; align-items: center;
-        }
-        .player-window {
-            width: 90%; max-width: 700px; background: #fff;
-            border: 3px solid var(--win-border); position: relative;
-        }
-        #stella-video { width: 100%; display: block; }
-        #like-btn {
-            position: absolute; bottom: 10px; right: 10px; background: var(--hot-pink);
-            color: white; border: none; padding: 6px 12px; border-radius: 16px; cursor: pointer;
-            font-weight: bold;
-        }
-        .heart-pop {
-            position: fixed; pointer-events: none; z-index: 9999; animation: heartFly 1s forwards;
-        }
+        /* 动画修复 */
         @keyframes heartFly {
             0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-200px); opacity: 0; }
+            100% { transform: translateY(-200px) opacity: 0; }
         }
+        .heart-pop { position: fixed; pointer-events: none; z-index: 9999; animation: heartFly 1s forwards; }
+
+        .contact-btn { display: inline-block; margin-top: 10px; padding: 6px 12px; background: var(--hot-pink); color: white; border: 1.5px solid var(--win-border); text-decoration: none; font-size: 11px; font-weight: bold; box-shadow: 2px 2px 0px #333; }
     </style>
 </head>
 <body>
@@ -124,48 +85,42 @@
     <div class="top-bar">
         <span class="top-menu-item">Stella OS</span>
         <span class="top-menu-item" onclick="openWin('about')">About Me</span>
-        <span class="top-menu-item">Gallery</span>
         <div style="margin-left: auto;" id="top-clock">--:-- • MAR 13</div>
     </div>
 
     <div class="desktop-icons">
-        <div class="icon" onclick="openWin('messenger')">
-            <img src="/assets/computer.png" alt="Messages">
-            <span>Messages</span>
-        </div>
-        <div class="icon" onclick="openWin('audio')">
-            <img src="/assets/vhs.png" alt="Recordings">
-            <span>Recordings</span>
-        </div>
-        <div class="icon" onclick="window.open('https://c6.y.qq.com/base/fcgi-bin/u?__=nYR9s9FaDfEq')">
-            <img src="/assets/headphone.png" alt="Playlist">
-            <span>Playlist</span>
-        </div>
-        <div class="icon" onclick="openGuitarMenu()">
-            <img src="/assets/video.png" alt="Videos">
-            <span>Stella Live</span>
-        </div>
+        <div class="icon" onclick="openWin('messenger')"><img src="https://img.icons8.com/pixel-line/64/000000/speech-bubble.png"><span>Messages</span></div>
+        <div class="icon" onclick="openWin('audio')"><img src="https://img.icons8.com/pixel-line/64/000000/ipod.png"><span>Recordings</span></div>
+        <div class="icon" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/32142002782-1-192.mp4', 'Sparks')"><img src="https://img.icons8.com/pixel-line/64/000000/guitar.png"><span>Live 1</span></div>
+        <div class="icon" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/25874732599-1-192.mp4', 'My Love')"><img src="https://img.icons8.com/pixel-line/64/000000/video-playlist.png"><span>Live 2</span></div>
     </div>
 
-    <div class="window" id="win-messenger" style="left: 400px; top: 100px; width: 320px; display: flex;">
-        <div class="window-header" onmousedown="dragStart(event, 'win-messenger')">
-            <span>MESSENGER</span>
-            <span onclick="closeWin('win-messenger')" style="cursor:pointer">×</span>
+    <div class="window" id="win-messenger" style="left: 350px; top: 80px; display: flex;">
+        <div class="window-header" onmousedown="dragStart(event, 'win-messenger')" style="background: var(--msn-blue); color: white;">
+            <span>(Online) Stella - Dahyun's Pink Room</span>
+            <span onclick="closeWin('win-messenger')" style="cursor:pointer">[X]</span>
         </div>
-        <div class="chat-content">
-            <div class="chat-header-row">
-                <img src="/assets/video.png" class="chat-avatar" alt="Stella">
-                <div style="font-size: 12px; font-weight: bold;">Stella</div>
+        <div class="msn-container">
+            <div class="msn-sidebar">
+                <img src="https://img.icons8.com/color/96/avatar.png" class="msn-avatar">
+                <p style="color: #003399; font-weight: bold; margin: 10px 0 2px; font-size: 13px;">Stella</p>
+                <p style="font-size: 10px; color: #666; font-style: italic;">"Playing Guitar... 🎸"</p>
             </div>
-            <div id="chat-box" style="font-size: 12px;"><b>Stella:</b> 嘿！你的专属 iPod 已经上线了，快去点点看！🎧</div>
-            <div style="margin-top:10px; display:flex; gap:5px;">
-                <input type="text" id="chat-in" style="flex:1; border:1px solid #333;" onkeypress="if(event.keyCode==13) send()">
-                <button onclick="send()" style="border:1px solid #333; background:#fff; font-size:11px;">Send</button>
+            <div class="msn-chat-area">
+                <div id="chat-box">
+                    <div style="background: #f0f0f0; border: 1px solid #ddd; padding: 8px; border-radius: 8px; font-size: 12px; max-width: 90%;">
+                        <b>Stella:</b> Hii! 欢迎来到我的房间！点击桌面的吉他图标可以看我的表演哦~ 💖
+                    </div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chat-in" style="flex:1; border: 1px solid #adc5f5; padding: 4px;" onkeypress="if(event.keyCode==13) sendMsg()">
+                    <button onclick="sendMsg()" style="border:1px solid #999; background: #eee; cursor:pointer; font-size: 11px;">发送</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="window" id="win-audio" style="left: 100px; top: 120px;">
+    <div class="window" id="win-audio" style="left: 80px; top: 100px;">
         <div class="window-header" onmousedown="dragStart(event, 'win-audio')" style="background: none; border:none;">
             <span>iPod</span>
             <span onclick="closeWin('win-audio')" style="cursor:pointer">×</span>
@@ -173,48 +128,32 @@
         <div class="ipod-screen">
             <div style="font-weight: bold;">Now Playing</div>
             <div style="margin: 5px 0;">stella_voice.mp3</div>
-            <div style="width: 80%; height: 4px; background: #333; margin-top:10px;"></div>
+            <div style="width: 70%; height: 3px; background: #333; margin-top:5px;"></div>
         </div>
-        <div class="ipod-wheel">
-            <div style="position:absolute; top:5px; font-size:10px; font-weight:bold; color:#999;">MENU</div>
-            <div class="ipod-center"></div>
-        </div>
-        <div style="padding: 0 15px 15px 15px;">
-            <audio controls style="width: 100%; height: 30px;">
-                <source src="你的SUPABASE链接.mp3" type="audio/mpeg">
-            </audio>
-        </div>
+        <div class="ipod-wheel"><div style="width:30px; height:30px; background:#eee; border-radius:50%; border:1px solid #ccc; position:absolute; top:30px; left:30px;"></div></div>
+        <div style="padding: 10px;"><audio controls style="width: 100%; height: 25px;"><source src="YOUR_AUDIO_URL.mp3" type="audio/mpeg"></audio></div>
     </div>
 
-    <div class="window" id="win-about" style="left: 200px; top: 150px; width: 320px;">
+    <div class="window" id="win-video" style="left: 450px; top: 200px;">
+        <div class="window-header" onmousedown="dragStart(event, 'win-video')" style="background: #ff007f; color: white;">
+            <span id="v-title">Stella Player</span>
+            <span onclick="closeVideo()" style="cursor:pointer">[X]</span>
+        </div>
+        <div class="video-container">
+            <video id="v-player" controls></video>
+        </div>
+        <button onclick="burstHearts()" style="background:var(--hot-pink); border:none; color:white; font-size:11px; padding:5px; cursor:pointer;">💖 Like Stella</button>
+    </div>
+
+    <div class="window" id="win-about" style="left: 150px; top: 350px; width: 280px;">
         <div class="window-header" onmousedown="dragStart(event, 'win-about')">
             <span>ABOUT AUTHOR</span>
             <span onclick="closeWin('win-about')" style="cursor:pointer">×</span>
         </div>
-        <div style="padding: 15px; background: white; margin: 5px; border: 1px solid #333;">
-            <p style="font-size: 13px; margin: 0;"><b>Hi, 我是网站作者!</b></p>
-            <p style="font-size: 12px; color: #555; line-height: 1.5;">这是我为 Stella 打造的复古数字空间。感谢每一位访问这里的你。</p>
-            <p style="font-size: 11px; color: #888;">Thanks to: DeepSeek, Stella, and Y2K Lovers.</p>
-            <a href="https://weibo.com/u/6394278497" class="contact-btn" target="_blank" rel="noopener">📫 联系我 / Contact Me</a>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-overlay" onclick="closeGuitarMenu()"></div>
-    <div class="video-modal" id="guitar-menu">
-        <h3 style="color: #111; margin: 0 0 10px;">🎸 Stella Live</h3>
-        <button class="video-option" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/32142002782-1-192.mp4', 'Sparks')">✨ Sparks</button>
-        <button class="video-option" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/25874732599-1-192.mp4', 'My Love Mine All Mine')">🌙 My Love Mine All Mine</button>
-        <div style="margin-top: 10px; font-size: 12px; cursor: pointer;" onclick="closeGuitarMenu()">[ 取消 ]</div>
-    </div>
-
-    <div id="video-player-container" onclick="stopVideo()">
-        <div class="player-window" onclick="event.stopPropagation()">
-            <div class="window-header" style="cursor: default;">
-                <span id="video-title">Stella Player</span>
-                <span onclick="stopVideo()" style="cursor:pointer">×</span>
-            </div>
-            <video id="stella-video" controls></video>
-            <button id="like-btn" onclick="burstHearts()">💖 给 Stella 点赞</button>
+        <div style="padding: 12px; background: white; margin: 3px; border: 1.5px solid #333; font-size: 12px;">
+            <p><b>Author: [你的名字]</b></p>
+            <p>基于 Y2K 美学打造。感谢支持！</p>
+            <a href="https://weibo.com/u/6394278497" class="contact-btn" target="_blank">📫 联系我 / Contact Me</a>
         </div>
     </div>
 
@@ -227,28 +166,33 @@
         }
         function closeWin(id) { document.getElementById(id).style.display = 'none'; }
 
-        async function send() {
-            const i = document.getElementById('chat-in');
-            const b = document.getElementById('chat-box');
-            if (!i.value) return;
-            const text = i.value;
-            b.innerHTML += `<div style="margin-top:5px;"><b>Me:</b> ${text}</div>`;
-            i.value = '';
-
-            try {
-                const response = await fetch('/api.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text })
-                });
-                const data = await response.json();
-                b.innerHTML += `<div style="margin-top:5px; color:#b1004b;"><b>Stella:</b> ${data.reply}</div>`;
-                b.scrollTop = b.scrollHeight;
-            } catch (e) {
-                b.innerHTML += `<div style="margin-top:5px; color:#666;"><i>Connection lost...</i></div>`;
-            }
+        // 视频播放逻辑
+        function playVideo(url, title) {
+            const win = document.getElementById('win-video');
+            const player = document.getElementById('v-player');
+            document.getElementById('v-title').innerText = "Playing: " + title;
+            player.src = url;
+            win.style.display = 'flex';
+            openWin('video');
+            player.play();
+        }
+        function closeVideo() {
+            const player = document.getElementById('v-player');
+            player.pause();
+            closeWin('win-video');
         }
 
+        // MSN 聊天逻辑
+        function sendMsg() {
+            const i = document.getElementById('chat-in');
+            const b = document.getElementById('chat-box');
+            if(!i.value) return;
+            b.innerHTML += `<div style="text-align:right; margin-top:8px;"><span style="background:#e1ffc7; border:1px solid #b5e68b; padding:5px 10px; border-radius:10px; font-size:12px; display:inline-block;">${i.value}</span></div>`;
+            i.value = '';
+            b.scrollTop = b.scrollHeight;
+        }
+
+        // 拖拽
         function dragStart(e, id) {
             const el = document.getElementById(id);
             let p1 = 0, p2 = 0, p3 = e.clientX, p4 = e.clientY;
@@ -261,48 +205,22 @@
             document.onmouseup = () => document.onmousemove = null;
         }
 
-        function updateTopClock() {
-            const now = new Date();
-            const t = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const d = now.toLocaleDateString('en-US', { month: 'short', day: '2-digit' }).toUpperCase();
-            document.getElementById('top-clock').innerText = `${t} • ${d}`;
-        }
-        setInterval(updateTopClock, 1000); updateTopClock();
-
-        // 视频弹窗与播放
-        function openGuitarMenu() {
-            document.getElementById('guitar-menu').style.display = 'block';
-            document.getElementById('modal-overlay').style.display = 'block';
-        }
-        function closeGuitarMenu() {
-            document.getElementById('guitar-menu').style.display = 'none';
-            document.getElementById('modal-overlay').style.display = 'none';
-        }
-        function playVideo(url, title) {
-            const video = document.getElementById('stella-video');
-            document.getElementById('video-title').innerText = "Now Playing: " + title;
-            video.src = url;
-            closeGuitarMenu();
-            document.getElementById('video-player-container').style.display = 'flex';
-            video.play();
-        }
-        function stopVideo() {
-            const video = document.getElementById('stella-video');
-            video.pause();
-            document.getElementById('video-player-container').style.display = 'none';
-        }
         function burstHearts() {
-            for (let i = 0; i < 10; i++) {
+            for(let i=0; i<8; i++){
                 const h = document.createElement('div');
-                h.className = 'heart-pop';
-                h.innerText = '💖';
-                h.style.left = (window.innerWidth / 2 + (Math.random() * 200 - 100)) + 'px';
-                h.style.top = (window.innerHeight / 2 + 100) + 'px';
-                h.style.fontSize = '24px';
+                h.className = 'heart-pop'; h.innerText = '💖';
+                h.style.left = event.clientX + (Math.random()*100-50) + 'px';
+                h.style.top = event.clientY + 'px';
                 document.body.appendChild(h);
                 setTimeout(() => h.remove(), 1000);
             }
         }
+
+        function clock() {
+            const now = new Date();
+            document.getElementById('top-clock').innerText = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + " • MAR 13";
+        }
+        setInterval(clock, 1000); clock();
     </script>
 </body>
 </html>
