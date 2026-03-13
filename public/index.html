@@ -1,41 +1,85 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stella OS | Digital Collection</title>
     <style>
         :root {
-            --hot-pink: #ff85a1;
-            --soft-pink: #f8c6d1;
-            --retro-blue: #7a7dbd;
-            --win-border: #222;
-            --msn-blue: #3a76f0;
-            --msn-light-blue: #dce7ff;
-            --ipod-gray: #e0e0e0;
-            --bratty-pink: #ff85a1;
-        }
+        --hot-pink: #ff85a1;
+        --soft-pink: #f8c6d1;
+        --retro-blue: #7a7dbd;
+        --win-border: #222;
+        --msn-blue: #3a76f0;
+        --msn-light-blue: #dce7ff;
+        --ipod-gray: #e0e0e0;
+        --bratty-pink: #ff85a1;
+    }
 
-        /* --- 1. 背景与基础样式 --- */
-        body {
-            margin: 0; height: 100vh; background: var(--retro-blue);
-            background-image: 
-                linear-gradient(135deg, rgba(255,133,161,0.4) 0%, transparent 50%),
-                repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 4px);
-            background-size: cover, 4px 4px;
-            font-family: "Zpix", "Press Start 2P", "VT323", "Pixelify Sans", "Courier New", monospace;
-            overflow: hidden;
-        }
+    /* --- 全局像素风修正 --- */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        /* 强制所有元素使用像素字体 */
+        font-family: "Pixelify Sans", "Zpix", "Courier New", monospace !important;
+        /* 关闭抗锯齿，让像素更清晰 */
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: crispEdges;
+    }
 
-        /* --- 2. 顶部导航栏 (带 About 文本) --- */
-        .top-bar {
-            position: fixed; top: 0; width: 100%; height: 28px;
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
-            border-bottom: 1.5px solid var(--win-border);
-            display: flex; align-items: center; padding: 0 15px; font-size: 13px; z-index: 10000;
-        }
-        .top-menu-item { margin-right: 20px; cursor: pointer; font-weight: bold; color: #333; text-decoration: none; }
-        .top-menu-item:hover { color: var(--hot-pink); }
+    /* 让图片也保持像素感（不模糊） */
+    img {
+        image-rendering: pixelated;
+    }
+
+    /* --- 1. 背景与基础样式 --- */
+    body {
+        margin: 0; 
+        height: 100vh; 
+        background: var(--retro-blue);
+        background-image: 
+            linear-gradient(135deg, rgba(255,133,161,0.4) 0%, transparent 50%),
+            repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 4px);
+        background-size: cover, 4px 4px;
+        overflow: hidden;
+    }
+
+    /* --- 2. 顶部导航栏 --- */
+    .top-bar {
+        position: fixed; 
+        top: 0; 
+        width: 100%; 
+        height: 28px;
+        background: rgba(255, 255, 255, 0.85); 
+        backdrop-filter: blur(8px);
+        border-bottom: 2px solid var(--win-border);
+        display: flex; 
+        align-items: center; 
+        padding: 0 15px; 
+        font-size: 14px; /* 像素字体略调大一点更好看 */
+        z-index: 10000;
+    }
+
+    .top-menu-item { 
+        margin-right: 20px; 
+        cursor: pointer; 
+        font-weight: bold; 
+        color: #333; 
+        text-decoration: none; 
+    }
+    
+    .top-menu-item:hover { 
+        color: var(--hot-pink); 
+    }
+
+    /* 修正时钟等文字的细节 */
+    #clock-display {
+        font-size: 12px;
+        font-weight: bold;
+    }
 
         /* --- 3. 桌面图标 --- */
         .desktop-icons {
@@ -301,10 +345,10 @@
             <span onclick="closeWin('win-about')" style="cursor:pointer">[X]</span>
         </div>
         <div style="padding: 20px; background: white; margin: 4px; border: 1px solid #333; font-size: 13px;">
-            <p><b>作者: [你的名字]</b></p>
-            <p>欢迎来到我的 Stella 收藏馆。这里记录了每一个闪光的瞬间。</p>
+            <p><b>所有解释权归微博---@不要平静的走进那个雨夜</b></p>
+            <p>欢迎来到 Stellaholism。这里记录了金多绚闪光的瞬间。</p>
             <hr>
-            <p><b>感谢名单:</b><br>DeepSeek, Stella, 以及正在看的你。</p>
+            <p><b>感谢名单:</b><br>deepseek、gemini、chatgpt、豆包</p>
             <a href="https://weibo.com/u/6394278497" class="contact-btn" target="_blank">📫 联系我 / Contact Me</a>
         </div>
     </div>
