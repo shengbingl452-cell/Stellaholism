@@ -81,6 +81,7 @@
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
+            cursor: move;
         }
         .window-controls { display: flex; gap: 5px; }
         .control-btn {
@@ -424,6 +425,18 @@
             };
             document.onmouseup = () => document.onmousemove = null;
         }
+
+        // 绑定聊天窗口拖拽（避免按钮点击误触发）
+        document.addEventListener('DOMContentLoaded', () => {
+            const messenger = document.getElementById('win-messenger');
+            if (!messenger) return;
+            const header = messenger.querySelector('.chat-header');
+            if (!header) return;
+            header.addEventListener('mousedown', (e) => {
+                if (e.target && e.target.classList && e.target.classList.contains('control-btn')) return;
+                dragStart(e, 'win-messenger');
+            });
+        });
 
         // 点赞红心
         function popHearts(e) {
