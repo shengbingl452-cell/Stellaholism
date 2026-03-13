@@ -38,7 +38,14 @@
         .top-menu-item:hover { color: var(--hot-pink); }
 
         /* --- 3. 桌面图标 --- */
-        .desktop-icons { position: absolute; bottom: 40px; left: 30px; display: flex; gap: 30px; }
+        .desktop-icons {
+            position: absolute;
+            top: 80px;
+            left: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
         .icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 60px; }
         .icon img { width: 42px; height: 42px; image-rendering: pixelated; }
         .icon span { font-size: 11px; color: white; margin-top: 6px; font-weight: bold; text-shadow: 1px 1px 2px #000; }
@@ -235,7 +242,7 @@
 
     <div class="window" id="win-messenger" style="left: 380px; top: 80px; display: flex;">
         <div class="chat-container">
-            <div class="chat-header">
+            <div class="chat-header" onmousedown="dragStart(event, 'win-messenger')">
                 <span>💖 Stella's Secret Chat (Online)</span>
                 <div class="window-controls">
                     <div class="control-btn">_</div>
