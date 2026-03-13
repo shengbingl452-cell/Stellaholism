@@ -7,15 +7,16 @@
     <title>Stella OS | Digital Collection</title>
     <style>
         :root {
-        --hot-pink: #ff85a1;
-        --soft-pink: #f8c6d1;
-        --retro-blue: #7a7dbd;
-        --win-border: #222;
-        --msn-blue: #3a76f0;
-        --msn-light-blue: #dce7ff;
-        --ipod-gray: #e0e0e0;
-        --bratty-pink: #ff85a1;
-    }
+            --hot-pink: #ff85a1;
+            --soft-pink: #f8c6d1;
+            --retro-blue: #7a7dbd;
+            --win-border: #222;
+            --msn-blue: #3a76f0;
+            --msn-light-blue: #dce7ff;
+            --ipod-gray: #e0e0e0;
+            --bratty-pink: #ff85a1;
+            --pixel-font: "Zpix", "Press Start 2P", "VT323", "Pixelify Sans", "Courier New", monospace;
+        }
 
     /* --- 全局像素风修正 --- */
     * {
@@ -96,13 +97,29 @@
 
         /* --- 4. 通用窗口插件 --- */
         .window {
-            position: absolute; background: var(--soft-pink); border: 1.5px solid var(--win-border);
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 10;
+            position: absolute;
+            background: #fff;
+            border: 2px solid var(--win-border);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 50;
         }
         .window-header {
             padding: 6px 10px; background: white; border-bottom: 1.5px solid var(--win-border);
             display: flex; justify-content: space-between; align-items: center; cursor: move; font-size: 11px;
         }
+        .header-title { display: flex; align-items: center; gap: 6px; font-weight: bold; }
+        .win-btn {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--win-border);
+            background: #eee;
+            font-family: var(--pixel-font);
+            cursor: pointer;
+            margin-left: 2px;
+        }
+        .win-btn.close:hover { background: var(--hot-pink); color: white; }
 
         /* --- 5. 聊天窗口样式（按新设计） --- */
         #win-messenger { width: 620px; }
@@ -252,9 +269,32 @@
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
         /* --- 6. 独立视频播放器 --- */
-        #win-video { width: 500px; background: #000; }
-        .video-wrap { position: relative; width: 100%; padding-bottom: 56.25%; }
-        .video-wrap video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .video-window {
+            width: 400px;
+            top: 100px;
+            left: 450px;
+        }
+        .video-window .window-body { padding: 12px; background: #fff; }
+        .video-container {
+            background: #000;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #stella-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .video-footer {
+            padding: 5px 10px;
+            background: var(--msn-light-blue);
+            border-top: 1.5px solid var(--win-border);
+            font-size: 11px;
+            color: #555;
+        }
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 2000;
@@ -348,15 +388,30 @@
         </div>
     </div>
 
-    <div class="window" id="win-video" style="left: 450px; top: 180px;">
-        <div class="window-header" onmousedown="dragStart(event, 'win-video')" style="background: #ff007f; color: white;">
-            <span id="vid-title">Stella Player</span>
-            <span onclick="stopVid()" style="cursor:pointer; font-weight:bold;">[X]</span>
+    <div class="window video-window" id="video-player" style="left: 450px; top: 180px;">
+        <div class="window-header" onmousedown="dragStart(event, 'video-player')">
+            <div class="header-title">
+                <span class="header-icon">📺</span>
+                StellaLive.exe
+            </div>
+            <div class="window-controls">
+                <button class="win-btn">_</button>
+                <button class="win-btn">□</button>
+                <button class="win-btn close" onclick="this.closest('.window').style.display='none'">×</button>
+            </div>
         </div>
-        <div class="video-wrap">
-            <video id="stella-vid-tag" controls></video>
+        <div class="window-body">
+            <div class="video-container">
+                <video id="stella-video" controls poster="">
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-footer">
+                <span class="status-text" id="video-status">Now Playing: </span>
+            </div>
+            <button onclick="popHearts(event)" style="background: var(--hot-pink); border:none; color:white; padding:8px; cursor:pointer; font-weight:bold;">💖 给 Stella 点赞</button>
         </div>
-        <button onclick="popHearts(event)" style="background: var(--hot-pink); border:none; color:white; padding:8px; cursor:pointer; font-weight:bold;">💖 给 Stella 点赞</button>
     </div>
 
     <div class="modal-overlay" id="video-overlay" onclick="closeVideoMenu()"></div>
@@ -411,12 +466,12 @@
 
         // 视频播放逻辑
         function playVideo(url, title) {
-            const win = document.getElementById('win-video');
-            const player = document.getElementById('stella-vid-tag');
-            document.getElementById('vid-title').innerText = "Live: " + title;
+            const win = document.getElementById('video-player');
+            const player = document.getElementById('stella-video');
+            const status = document.getElementById('video-status');
             player.src = url;
+            status.innerText = "Now Playing: " + title;
             win.style.display = 'flex';
-            openWin('video');
             player.play();
         }
         function openVideoMenu() {
@@ -428,9 +483,9 @@
             document.getElementById('video-overlay').style.display = 'none';
         }
         function stopVid() {
-            const player = document.getElementById('stella-vid-tag');
+            const player = document.getElementById('stella-video');
             player.pause();
-            closeWin('win-video');
+            document.getElementById('video-player').style.display = 'none';
         }
 
         // Chat 发送逻辑（DeepSeek API）
