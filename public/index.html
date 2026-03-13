@@ -52,65 +52,123 @@
             display: flex; justify-content: space-between; align-items: center; cursor: move; font-size: 11px;
         }
 
-        /* --- 5. 聊天窗口样式 --- */
+        /* --- 5. 聊天窗口样式（按新设计） --- */
         #win-messenger { width: 620px; }
         .chat-container {
-            background: #fff;
-            border: 1px solid #777;
-            margin: 2px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 3px solid var(--bratty-pink);
+            border-radius: 10px 10px 5px 5px;
+            box-shadow: 10px 10px 0px rgba(255, 0, 127, 0.2);
             display: flex;
             flex-direction: column;
             height: 420px;
+            margin: 2px;
         }
         .chat-header {
-            background: var(--msn-blue);
-            color: #fff;
-            padding: 6px 10px;
+            background: linear-gradient(to right, var(--bratty-pink), #ff69b4);
+            padding: 10px;
+            color: white;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            font-size: 12px;
+            align-items: center;
+            font-weight: bold;
         }
-        .header-info { display: flex; align-items: center; gap: 8px; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #00d26a; box-shadow: 0 0 4px rgba(0,0,0,0.3); }
-        .window-controls { display: flex; gap: 4px; }
+        .window-controls { display: flex; gap: 5px; }
         .control-btn {
-            width: 18px; height: 16px; font-size: 10px; border: 1px solid #c9d7ff; background: #e7efff; cursor: pointer;
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid white;
+            background: transparent;
+            color: white;
+            line-height: 15px;
+            text-align: center;
+            cursor: pointer;
         }
-        .control-btn.close-btn { background: #ffb3c1; border-color: #ff6f8a; }
+        .chat-main { display: flex; flex: 1; overflow: hidden; }
 
-        .chat-main { display: flex; flex: 1; background: #fff; }
         .sidebar {
-            width: 180px; background: var(--msn-light-blue);
-            border-right: 1px solid #adc5f5; padding: 16px; box-sizing: border-box;
+            width: 180px;
+            border-right: 1px dashed var(--bratty-pink);
+            padding: 15px;
+            background: rgba(255, 240, 245, 0.5);
         }
-        .avatar-box { text-align: center; }
-        .avatar-wrapper {
-            width: 96px; height: 96px; margin: 0 auto 8px; background: #fff;
-            border: 3px solid #fff; box-shadow: 0 0 8px rgba(0,0,0,0.15); overflow: hidden;
+        .avatar-box { text-align: center; margin-bottom: 20px; }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border: 3px solid white;
+            outline: 2px solid var(--matcha-green);
+            border-radius: 5px;
         }
-        .avatar { width: 100%; height: 100%; object-fit: cover; }
-        .user-name { font-weight: bold; margin: 6px 0 2px; color: #003399; }
-        .status-text { font-size: 11px; color: #666; font-style: italic; }
-        .sidebar-nav { margin-top: 10px; font-size: 11px; color: #333; }
 
-        .chat-content { flex: 1; display: flex; flex-direction: column; background: #fff; }
-        #messages { flex: 1; padding: 15px; overflow-y: auto; background-image: radial-gradient(#ddd 1px, transparent 1px); background-size: 16px 16px; }
-        .chat-input-area { border-top: 1px solid #ccc; padding: 10px; }
-        .input-wrapper { display: flex; gap: 8px; }
-        #user-input { flex: 1; height: 32px; border: 1px solid #adc5f5; padding: 0 8px; }
-        #send-btn { padding: 5px 12px; cursor: pointer; }
+        .chat-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(#ffc0cb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        #messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .msg {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .msg.stella {
+            align-self: flex-start;
+            background: white;
+            border: 1px solid var(--bratty-pink);
+            color: #333;
+        }
+        .msg.user {
+            align-self: flex-end;
+            background: var(--bratty-pink);
+            color: white;
+        }
 
-        /* 聊天气泡微调 */
-        .msg-wrapper { display: flex; margin-bottom: 12px; animation: fadeIn 0.3s ease; }
-        .msg-wrapper.stella { justify-content: flex-start; }
-        .msg-wrapper.user { justify-content: flex-end; }
-        .msg { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 14px; position: relative; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
-        .stella .msg { background: white; border: 1.5px solid var(--bratty-pink); border-bottom-left-radius: 2px; }
-        .user .msg { background: var(--bratty-pink); color: white; border-bottom-right-radius: 2px; }
-        .scroll-styled::-webkit-scrollbar { width: 6px; }
-        .scroll-styled::-webkit-scrollbar-thumb { background: var(--bratty-pink); border-radius: 10px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .chat-input-area {
+            padding: 15px;
+            background: white;
+            border-top: 2px solid var(--y2k-silver);
+            display: flex;
+            gap: 10px;
+        }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--y2k-silver);
+            border-radius: 5px;
+            outline: none;
+        }
+        #user-input:focus { border-color: var(--bratty-pink); }
+        #send-btn {
+            background: var(--matcha-green);
+            border: none;
+            padding: 0 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .emoji-drop {
+            position: fixed;
+            top: -50px;
+            font-size: 2rem;
+            animation: fall 3s linear forwards;
+            z-index: 1000;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
         /* --- 6. 独立视频播放器 --- */
         #win-video { width: 500px; background: #000; }
@@ -157,43 +215,32 @@
     <div class="window" id="win-messenger" style="left: 380px; top: 80px; display: flex;">
         <div class="chat-container">
             <div class="chat-header">
-                <div class="header-info">
-                    <span class="status-dot"></span>
-                    <span>Stella's Secret Chat (Online)</span>
-                </div>
+                <span>💖 Stella's Secret Chat (Online)</span>
                 <div class="window-controls">
-                    <button class="control-btn" title="最小化">_</button>
-                    <button class="control-btn" title="最大化">□</button>
-                    <button class="control-btn close-btn" onclick="closeWin('win-messenger')">×</button>
+                    <div class="control-btn">_</div>
+                    <div class="control-btn">□</div>
+                    <div class="control-btn" style="background:var(--bratty-pink)" onclick="closeWin('win-messenger')">×</div>
                 </div>
             </div>
 
             <div class="chat-main">
                 <aside class="sidebar">
                     <div class="avatar-box">
-                        <div class="avatar-wrapper">
-                            <img src="/assets/video.png" alt="Dahyun" class="avatar">
-                        </div>
-                        <p class="user-name">Dahyun ✨</p>
-                        <p class="status-text">(Eating Matcha...)</p>
+                        <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Dahyun" alt="Dahyun" class="avatar">
+                        <p style="font-size: 12px; margin-top: 5px; color: var(--bratty-pink);"><b>Dahyun</b><br>(Eating Matcha...)</p>
                     </div>
-                    <nav class="sidebar-nav">
-                        <p>Status: 🎵 Playing guitar</p>
-                    </nav>
+                    <div style="font-size: 11px; color: #666;">
+                        <p>Status: Listening to Sabrina Carpenter 🎵</p>
+                    </div>
                 </aside>
 
                 <section class="chat-content">
-                    <div id="messages" class="scroll-styled">
-                        <div class="msg-wrapper stella">
-                            <div class="msg">Hii! 欢迎来到我的粉色秘密空间！我是 Stella ✨~ 准备好跟我一起玩了吗？💖</div>
-                        </div>
+                    <div id="messages">
+                        <div class="msg stella">Hii! 欢迎来到我的粉色秘密空间！我是 Stella ✨~ 准备好跟我一起玩了吗？💖</div>
                     </div>
-
                     <div class="chat-input-area">
-                        <div class="input-wrapper">
-                            <input type="text" id="user-input" placeholder="输入 'Cupcake' 或跟我聊聊..." autocomplete="off">
-                            <button id="send-btn" onclick="sendMessage()">Send</button>
-                        </div>
+                        <input type="text" id="user-input" placeholder="输入 'Cupcake' 或跟我聊聊..." onkeypress="if(event.keyCode==13) sendMessage()">
+                        <button id="send-btn" onclick="sendMessage()">Send</button>
                     </div>
                 </section>
             </div>
@@ -276,12 +323,14 @@
             const text = input.value.trim();
             if (!text) return;
 
-            const userWrap = document.createElement('div');
-            userWrap.className = 'msg-wrapper user';
-            userWrap.innerHTML = `<div class="msg">${text}</div>`;
-            list.appendChild(userWrap);
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg user';
+            userMsg.innerText = text;
+            list.appendChild(userMsg);
             list.scrollTop = list.scrollHeight;
             input.value = '';
+
+            if (text.toLowerCase().includes('cupcake')) triggerDrop('🧁');
 
             try {
                 const response = await fetch('/api.php', {
@@ -291,17 +340,31 @@
                 });
                 const data = await response.json();
                 const reply = data.reply || '...';
-                const botWrap = document.createElement('div');
-                botWrap.className = 'msg-wrapper stella';
-                botWrap.innerHTML = `<div class="msg">${reply}</div>`;
-                list.appendChild(botWrap);
+                const botMsg = document.createElement('div');
+                botMsg.className = 'msg stella';
+                botMsg.innerText = reply;
+                list.appendChild(botMsg);
                 list.scrollTop = list.scrollHeight;
             } catch (e) {
-                const errWrap = document.createElement('div');
-                errWrap.className = 'msg-wrapper stella';
-                errWrap.innerHTML = `<div class="msg">连接失败，请稍后再试。</div>`;
-                list.appendChild(errWrap);
+                const errMsg = document.createElement('div');
+                errMsg.className = 'msg stella';
+                errMsg.innerText = '连接失败，请稍后再试。';
+                list.appendChild(errMsg);
                 list.scrollTop = list.scrollHeight;
+            }
+        }
+
+        function triggerDrop(emoji) {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const drop = document.createElement('div');
+                    drop.className = 'emoji-drop';
+                    drop.innerText = emoji;
+                    drop.style.left = Math.random() * 100 + 'vw';
+                    drop.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                    document.body.appendChild(drop);
+                    setTimeout(() => drop.remove(), 3000);
+                }, i * 100);
             }
         }
 
