@@ -174,6 +174,22 @@
         #win-video { width: 500px; background: #000; }
         .video-wrap { position: relative; width: 100%; padding-bottom: 56.25%; }
         .video-wrap video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 2000;
+        }
+        .video-modal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 320px; background: white; border: 3px solid var(--win-border);
+            padding: 20px; z-index: 2001; text-align: center;
+            box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.2);
+        }
+        .video-option {
+            display: block; width: 100%; padding: 10px; margin: 8px 0;
+            background: #ffe1ea; border: 2px solid var(--win-border);
+            font-weight: bold; cursor: pointer;
+        }
+        .video-option:hover { background: var(--hot-pink); color: white; }
 
         /* --- 7. 关于作者与 iPod --- */
         #win-audio { width: 220px; border-radius: 20px; background: var(--ipod-gray); border: 2.5px solid #333; overflow: hidden; }
@@ -199,16 +215,20 @@
 
     <div class="desktop-icons">
         <div class="icon" onclick="openWin('messenger')">
-            <img src="https://img.icons8.com/pixel-line/64/000000/speech-bubble.png">
-            <span>Messenger</span>
+            <img src="/assets/computer.png" alt="Messages">
+            <span>Messages</span>
         </div>
         <div class="icon" onclick="openWin('audio')">
-            <img src="https://img.icons8.com/pixel-line/64/000000/ipod.png">
+            <img src="/assets/vhs.png" alt="Recordings">
             <span>Recordings</span>
         </div>
-        <div class="icon" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/32142002782-1-192.mp4', 'Sparks')">
-            <img src="https://img.icons8.com/pixel-line/64/000000/guitar.png">
-            <span>Live 1</span>
+        <div class="icon" onclick="window.open('https://c6.y.qq.com/base/fcgi-bin/u?__=nYR9s9FaDfEq')">
+            <img src="/assets/headphone.png" alt="Playlist">
+            <span>Playlist</span>
+        </div>
+        <div class="icon" onclick="openVideoMenu()">
+            <img src="/assets/video.png" alt="Stella Live">
+            <span>Stella Live</span>
         </div>
     </div>
 
@@ -256,6 +276,14 @@
             <video id="stella-vid-tag" controls></video>
         </div>
         <button onclick="popHearts(event)" style="background: var(--hot-pink); border:none; color:white; padding:8px; cursor:pointer; font-weight:bold;">💖 给 Stella 点赞</button>
+    </div>
+
+    <div class="modal-overlay" id="video-overlay" onclick="closeVideoMenu()"></div>
+    <div class="video-modal" id="video-menu">
+        <h3 style="color: #111; margin: 0 0 10px;">🎸 Stella Live</h3>
+        <button class="video-option" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/32142002782-1-192.mp4', 'Sparks')">✨ Sparks</button>
+        <button class="video-option" onclick="playVideo('https://gzhsvctnisnoimiddoia.supabase.co/storage/v1/object/public/stella/25874732599-1-192.mp4', 'My Love Mine All Mine')">🌙 My Love Mine All Mine</button>
+        <div style="margin-top: 10px; font-size: 12px; cursor: pointer;" onclick="closeVideoMenu()">[ 取消 ]</div>
     </div>
 
     <div class="window" id="win-about" style="left: 100px; top: 120px; width: 300px;">
@@ -309,6 +337,14 @@
             win.style.display = 'flex';
             openWin('video');
             player.play();
+        }
+        function openVideoMenu() {
+            document.getElementById('video-menu').style.display = 'block';
+            document.getElementById('video-overlay').style.display = 'block';
+        }
+        function closeVideoMenu() {
+            document.getElementById('video-menu').style.display = 'none';
+            document.getElementById('video-overlay').style.display = 'none';
         }
         function stopVid() {
             const player = document.getElementById('stella-vid-tag');
