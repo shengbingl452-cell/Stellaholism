@@ -316,6 +316,28 @@
         #win-audio { width: 220px; border-radius: 20px; background: var(--ipod-gray); border: 2.5px solid #333; overflow: hidden; }
         .ipod-screen { background: #9aad9a; margin: 12px; height: 85px; border: 2px solid #555; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: "Pixelify Sans", "Zpix", "SimSun", monospace !important; font-size: 11px; }
         .contact-btn { display: inline-block; margin-top: 10px; padding: 8px 15px; background: var(--hot-pink); color: white; border: 1.5px solid var(--win-border); text-decoration: none; font-size: 11px; font-weight: bold; box-shadow: 3px 3px 0px #333; }
+        .pet-btn {
+            font-size: 24px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 2px 2px 0px #888;
+        }
+        .pet-btn:hover {
+            background: #e0e0e0;
+            transform: scale(1.1);
+        }
+        .pet-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0px 0px 0px #888;
+        }
 
         /* 动画修复 */
         @keyframes heartFly {
@@ -371,7 +393,7 @@
             <div class="chat-main">
                 <aside class="sidebar">
                     <div class="avatar-box">
-                        <img src="/IMG_4064.JPG" alt="Dahyun" class="avatar">
+                        <img src="/IMG_4064.JPG" alt="Stella" class="avatar">
                         <p style="font-size: 12px; margin-top: 5px; color: var(--bratty-pink);"><b>Dahyun</b><br>(Eating Matcha...)</p>
                     </div>
                     <div style="font-size: 11px; color: #666;">
@@ -458,16 +480,16 @@
         <div style="padding: 10px;"><audio controls style="width:100%; height:25px;"><source src="/assets/sample.wav" type="audio/wav"></audio></div>
     </div>
 
-    <div class="window" id="win-cat" style="left: 140px; top: 180px; width: 360px;">
+    <div class="window" id="win-cat" style="left: 140px; top: 180px; width: 300px;">
         <div class="window-header" onmousedown="dragStart(event, 'win-cat')">
             <span>Stella Idle</span>
             <span onclick="closeWin('win-cat')" style="cursor:pointer">×</span>
         </div>
-        <div style="padding: 12px; background: #fff; display:flex; flex-direction: column; align-items: center;">
-            <img id="pet-image" src="/assets/stellanyang-idle.png" alt="Stella Idle" style="max-width: 100%; height: auto; margin-bottom: 15px;">
-            <div class="pet-controls" style="display: flex; gap: 10px;">
-                <button onclick="feedPet()">喂食</button>
-                <button onclick="playGuitar()">弹吉他</button>
+        <div style="padding: 20px; background: #fff; display:flex; flex-direction: column; align-items: center;">
+            <img id="pet-image" src="/assets/stellanyang-idle.png" alt="Stella" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 20px;">
+            <div class="pet-controls" style="display: flex; gap: 20px;">
+                <button class="pet-btn" onclick="feedPet()" title="喂食">🍭</button>
+                <button class="pet-btn" onclick="playGuitar()" title="弹吉他">🎸</button>
             </div>
         </div>
     </div>
