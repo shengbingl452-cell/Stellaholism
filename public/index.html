@@ -381,9 +381,31 @@
         #photo-feed {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
+            gap: 15px;
             justify-content: center;
+        }
+        #win-gallery {
+            display: none;
+            flex-direction: column;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+            min-width: 300px;
+            min-height: 200px;
+        }
+        #win-gallery .window-content {
+            background: #555;
+            height: calc(100% - 70px);
+            overflow-y: auto;
+            padding: 15px;
+        }
+        #win-gallery .window-content::-webkit-scrollbar { width: 16px; }
+        #win-gallery .window-content::-webkit-scrollbar-track {
+            background: #c0c0c0;
+            box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px #808080;
+        }
+        #win-gallery .window-content::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #dfdfdf #808080 #808080 #dfdfdf;
         }
         .pixel-btn {
             font-size: 11px;
@@ -411,7 +433,21 @@
         <div style="margin-left: auto;" id="clock-display">--:-- • MAR 13</div>
     </div>
 
-    <div id="photo-feed"></div>
+    <div class="window" id="win-gallery" style="left: 100px; top: 100px; width: 600px; height: 450px;">
+        <div class="window-header" onmousedown="dragStart(event, 'win-gallery')">
+            <span>Stel-Gram Explorer v1.0</span>
+            <div class="window-controls">
+                <span onclick="toggleGalleryWin(false)" style="cursor:pointer; font-weight:bold;">×</span>
+            </div>
+        </div>
+        <div class="window-toolbar" style="background: #c0c0c0; padding: 5px; border-bottom: 2px solid #808080; display: flex; gap: 10px;">
+            <button class="pixel-btn" onclick="toggleUploadWin(true)" style="height: 25px; font-size: 11px;">[ 💾 Upload New ]</button>
+            <button class="pixel-btn" onclick="fetchAndRenderPhotos()" style="height: 25px; font-size: 11px;">[ 🔄 Refresh ]</button>
+        </div>
+        <div class="window-content">
+            <div id="photo-feed"></div>
+        </div>
+    </div>
 
     <div class="window" id="win-upload" style="width: 320px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; display: none;">
         <div class="window-header">
@@ -438,6 +474,10 @@
         <div class="icon" onclick="toggleUploadWin(true)">
             <img src="https://img.icons8.com/color/48/000000/vintage-camera.png" alt="Gallery">
             <span>Stel-Gram</span>
+        </div>
+        <div class="icon" onclick="toggleGalleryWin(true)">
+            <img src="https://img.icons8.com/color/48/000000/photo-album.png" alt="Gallery">
+            <span>My Photos</span>
         </div>
         <div class="icon" onclick="openWin('cat')">
             <img src="/assets/cat.png" alt="Cat">
@@ -578,8 +618,32 @@
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
         const BUCKET_NAME = 'stellla';
 
+        function bringToFront(element) {
+            const allWindows = document.querySelectorAll('.window');
+            let maxZ = 100;
+            allWindows.forEach(w => {
+                const z = parseInt(window.getComputedStyle(w).zIndex || '0', 10);
+                if (z > maxZ) maxZ = z;
+            });
+            element.style.zIndex = maxZ + 1;
+        }
+
         function toggleUploadWin(show) {
-            document.getElementById('win-upload').style.display = show ? 'block' : 'none';
+            const win = document.getElementById('win-upload');
+            if (!win) return;
+            win.style.display = show ? 'block' : 'none';
+            if (show) bringToFront(win);
+        }
+
+        function toggleGalleryWin(show) {
+            const win = document.getElementById('win-gallery');
+            if (!win) return;
+            win.style.display = show ? 'flex' : 'none';
+            if (show) {
+                win.style.flexDirection = 'column';
+                bringToFront(win);
+                fetchAndRenderPhotos();
+            }
         }
 
         async function fetchAndRenderPhotos() {
