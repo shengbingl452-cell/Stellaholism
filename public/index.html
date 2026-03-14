@@ -463,8 +463,12 @@
             <span>Stella Idle</span>
             <span onclick="closeWin('win-cat')" style="cursor:pointer">×</span>
         </div>
-        <div style="padding: 12px; background: #fff; display:flex; justify-content:center;">
-            <img src="/assets/stellanyang-idle.png" alt="Stella Idle" style="max-width: 100%; height: auto;">
+        <div style="padding: 12px; background: #fff; display:flex; flex-direction: column; align-items: center;">
+            <img id="pet-image" src="/assets/stellanyang-idle.png" alt="Stella Idle" style="max-width: 100%; height: auto; margin-bottom: 15px;">
+            <div class="pet-controls" style="display: flex; gap: 10px;">
+                <button onclick="feedPet()">喂食</button>
+                <button onclick="playGuitar()">弹吉他</button>
+            </div>
         </div>
     </div>
 
@@ -610,6 +614,42 @@
             document.getElementById('clock-display').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + " • MAR 13";
         }
         setInterval(updateClock, 1000); updateClock();
+
+        const petImages = {
+            idle: '/assets/stellanyang-idle.png',
+            feeding: '/assets/stellanyang-feeding.png',
+            playingGuitar: '/assets/stellanyang-playing-guitar.png',
+            happy: '/assets/stellanyang-happy.png'
+        };
+
+        const petImageElement = document.getElementById('pet-image');
+
+        function setPetState(state, duration = 2000) {
+            if (petImageElement) {
+                petImageElement.src = petImages[state];
+                petImageElement.alt = `Stella is ${state}`;
+                if (state !== 'idle') {
+                    setTimeout(() => {
+                        petImageElement.src = petImages.idle;
+                        petImageElement.alt = 'Stella Idle';
+                    }, duration);
+                }
+            }
+        }
+
+        function feedPet() {
+            setPetState('feeding', 3000);
+            console.log('Stella is being fed!');
+        }
+
+        function playGuitar() {
+            setPetState('playingGuitar', 4000);
+            console.log('Stella is playing guitar!');
+        }
+
+        function makePetHappy() {
+            setPetState('happy', 2500);
+        }
 
         // Enter 发送
         document.addEventListener('DOMContentLoaded', () => {
