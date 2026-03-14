@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stella OS | Digital Collection</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --hot-pink: #ff85a1;
@@ -375,6 +376,30 @@
             100% { transform: translateY(-220px) opacity: 0; }
         }
         .heart-pop { position: fixed; pointer-events: none; z-index: 9999; animation: heartFly 1s forwards; font-size: 24px; }
+
+        /* --- Photo feed --- */
+        #photo-feed {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+        .pixel-btn {
+            font-size: 11px;
+            background: #e7e7e7;
+            border: none;
+            outline: none;
+            position: relative;
+            box-shadow:
+                -2px 0 0 0 #000,
+                2px 0 0 0 #000,
+                0 -2px 0 0 #000,
+                0 2px 0 0 #000,
+                inset -2px -2px 0 0 #888;
+            cursor: pointer;
+        }
+        .pixel-btn:hover { background: #d1d1d1; }
     </style>
 </head>
 <body>
@@ -384,6 +409,25 @@
         <span class="top-menu-item">Stella OS</span>
         <span class="top-menu-item" onclick="openWin('about')">About Author</span>
         <div style="margin-left: auto;" id="clock-display">--:-- • MAR 13</div>
+    </div>
+
+    <div id="photo-feed"></div>
+
+    <div class="window" id="win-upload" style="width: 320px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; display: none;">
+        <div class="window-header">
+            <span>Stel-Gram_Upload_Wizard.exe</span>
+            <span onclick="toggleUploadWin(false)" style="cursor:pointer; font-weight:bold;"> [X] </span>
+        </div>
+        <div style="padding: 15px; background: #c0c0c0; border: 2px solid #fff; border-right-color: #808080; border-bottom-color: #808080;">
+            <p style="font-size: 12px; margin-bottom: 10px; color: #000;">Select a digital memory to archive:</p>
+            <input type="file" id="file-input" style="width: 100%; font-size: 12px; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 10px; color: #444;">Status: Ready</span>
+                <button class="pixel-btn" id="upload-btn" onclick="handleUpload()" style="width: 100px; height: 30px;">
+                    <span>UPLOAD</span>
+                </button>
+            </div>
+        </div>
     </div>
 
     <div class="desktop-icons">
@@ -525,6 +569,90 @@
     </div>
 
     <script>
+        const supabaseUrl = 'https://gzhsvctnisnoimiddoia.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6aHN2Y3RuaXNub2ltaWRkb2lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxODk4NzcsImV4cCI6MjA4ODc2NTg3N30.tgYKAX_lbjsQ0snGFWLMc6pTUtgmv-D9EywWAOxmbqQ';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const BUCKET_NAME = 'stellla';
+
+        function toggleUploadWin(show) {
+            document.getElementById('win-upload').style.display = show ? 'block' : 'none';
+        }
+
+        async function fetchAndRenderPhotos() {
+            const { data, error } = await _supabase.storage
+                .from(BUCKET_NAME)
+                .list('', {
+                    limit: 50,
+                    sortBy: { column: 'created_at', order: 'desc' }
+                });
+
+            if (error) {
+                console.error("Error listing files:", error.message);
+                return;
+            }
+
+            const feed = document.getElementById('photo-feed');
+            feed.innerHTML = '';
+
+            data.forEach(file => {
+                if (file.name === '.emptyKeep') return;
+                const { data: { publicUrl } } = _supabase.storage
+                    .from(BUCKET_NAME)
+                    .getPublicUrl(file.name);
+
+                const photoCard = `
+                    <div class="photo-card" style="background:#c0c0c0; border:2px solid; border-color:#fff #808080 #808080 #fff; padding:5px; width:220px; box-shadow: 4px 4px 0px rgba(0,0,0,0.2);">
+                        <div style="background: linear-gradient(90deg, #000080, #087db2); color:white; font-size:11px; padding:2px 6px; margin-bottom:5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                            ${file.name}
+                        </div>
+                        <div style="border:1px solid #000; background:#000; display:flex; align-items:center; justify-content:center; height:150px; overflow:hidden;">
+                            <img src="${publicUrl}" style="width:100%; height:auto; filter: saturate(1.3) contrast(1.1); image-rendering: pixelated;">
+                        </div>
+                        <div style="padding:5px 0 0 0; display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:10px; color:#000;">${new Date(file.created_at).toLocaleDateString()}</span>
+                            <button class="pixel-btn" style="width:30px; height:20px; font-size:10px;">❤</button>
+                        </div>
+                    </div>
+                `;
+                feed.innerHTML += photoCard;
+            });
+        }
+
+        async function handleUpload() {
+            const fileInput = document.getElementById('file-input');
+            const btn = document.getElementById('upload-btn');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select a file first!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = "<span>SAVING...</span>";
+
+            const fileName = `IMG_${Date.now()}_${file.name.replace(/\\s+/g, '_')}`;
+
+            try {
+                const { error } = await _supabase.storage
+                    .from(BUCKET_NAME)
+                    .upload(fileName, file);
+
+                if (error) throw error;
+
+                alert("Memory Archived Successfully!");
+                fileInput.value = '';
+                toggleUploadWin(false);
+                fetchAndRenderPhotos();
+                if (typeof setPetState === 'function') setPetState('happy', 3000);
+
+            } catch (err) {
+                alert("Upload Error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = "<span>UPLOAD</span>";
+            }
+        }
         // 窗口管理：显示与置顶
         function openWin(id) {
             const el = document.getElementById('win-' + id);
@@ -666,6 +794,9 @@
             document.getElementById('clock-display').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + " • MAR 13";
         }
         setInterval(updateClock, 1000); updateClock();
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchAndRenderPhotos();
+        });
 
         const petImages = {
             idle: '/assets/stellanyang-idle.png',
