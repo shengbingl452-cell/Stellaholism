@@ -369,6 +369,12 @@
             animation: idleFloat 3s ease-in-out infinite;
         }
         .anim-jump { animation: jumpAction 0.5s ease-out !important; }
+        @keyframes lowEnergyBlink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .low-energy { animation: lowEnergyBlink 1s infinite; }
 
         /* 动画修复 */
         @keyframes heartFly {
@@ -596,14 +602,28 @@
 
     <div class="window" id="win-cat" style="left: 140px; top: 180px; width: 300px;">
         <div class="window-header" onmousedown="dragStart(event, 'win-cat')">
-            <span>Stella Idle</span>
+            <span>Stella_Pet.exe</span>
             <span onclick="closeWin('win-cat')" style="cursor:pointer">×</span>
         </div>
-        <div style="padding: 20px; background: #fff; display:flex; flex-direction: column; align-items: center;">
-            <img id="pet-image" src="/assets/stellanyang-idle.png" alt="Stella" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 20px;">
-            <div class="pet-controls" style="display: flex; gap: 15px; margin-top: 10px;">
-                <button class="pet-btn" onclick="feedPet()" title="喂食"><span>🍖</span></button>
-                <button class="pet-btn" onclick="playGuitar()" title="弹吉他"><span>🎸</span></button>
+        <div style="padding: 15px; background: #fff; display:flex; flex-direction: column; align-items: center;">
+            <div style="width: 100%; margin-bottom: 10px; font-size: 10px; color: #333;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                    <span>HUNGER:</span><span id="hunger-val">100%</span>
+                </div>
+                <div style="width: 100%; height: 8px; background: #eee; border: 1px solid #000; position: relative;">
+                    <div id="hunger-bar" style="width: 100%; height: 100%; background: #00ff00;"></div>
+                </div>
+            </div>
+
+            <div id="pet-display" style="position: relative; width: 150px; height: 150px; background: radial-gradient(circle, #e0f7fa 0%, #fff 70%); border: 2px inset #eee; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                <div id="pet-bubble" style="position: absolute; top: 5px; right: 5px; background: white; border: 1px solid #000; padding: 2px 5px; font-size: 10px; display: none;">Hello!</div>
+                <img id="pet-image" src="/assets/stellanyang-idle.png" alt="Stella" style="width: 100px; height: 100px; object-fit: contain; z-index: 2;">
+            </div>
+
+            <div class="pet-controls" style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="pet-btn" onclick="feedPet()" title="FEED"><span>🍖</span></button>
+                <button class="pet-btn" onclick="playGuitar()" title="PLAY"><span>🎸</span></button>
+                <button class="pet-btn" onclick="makePetHappy()" title="LOVE"><span>💖</span></button>
             </div>
         </div>
     </div>
@@ -871,6 +891,37 @@
 
         const petImageElement = document.getElementById('pet-image');
 
+        // 新增状态变量
+        let hunger = 100;
+        let petMood = 'happy';
+
+        function showBubble(text, duration = 2000) {
+            const bubble = document.getElementById('pet-bubble');
+            if (!bubble) return;
+            bubble.innerText = text;
+            bubble.style.display = 'block';
+            setTimeout(() => { bubble.style.display = 'none'; }, duration);
+        }
+
+        function updateStats() {
+            const bar = document.getElementById('hunger-bar');
+            const val = document.getElementById('hunger-val');
+            const petImg = document.getElementById('pet-image');
+            if (!bar || !val) return;
+            bar.style.width = hunger + '%';
+            val.innerText = hunger + '%';
+            if (hunger < 30) {
+                bar.style.background = '#ff4d6d';
+                if (petImg) petImg.classList.add('low-energy');
+            } else if (hunger < 60) {
+                bar.style.background = '#ffd700';
+                if (petImg) petImg.classList.remove('low-energy');
+            } else {
+                bar.style.background = '#00ff00';
+                if (petImg) petImg.classList.remove('low-energy');
+            }
+        }
+
         function setPetState(state, duration = 2000) {
             if (petImageElement) {
                 petImageElement.src = petImages[state];
@@ -889,8 +940,14 @@
         }
 
         function feedPet() {
-            setPetState('feeding', 3000);
-            console.log('Stella is being fed!');
+            if (hunger >= 100) {
+                showBubble("I'm full! ✨");
+                return;
+            }
+            hunger = Math.min(100, hunger + 20);
+            setPetState('feeding', 2000);
+            showBubble("Yummy! 🍬");
+            updateStats();
         }
 
         function playGuitar() {
@@ -901,6 +958,15 @@
         function makePetHappy() {
             setPetState('happy', 2500);
         }
+
+        setInterval(() => {
+            if (hunger > 0) {
+                hunger -= 1;
+                updateStats();
+            } else {
+                showBubble("Hungry... T_T");
+            }
+        }, 5000);
 
         // Enter 发送
         document.addEventListener('DOMContentLoaded', () => {
