@@ -339,6 +339,10 @@
             <img src="/assets/computer.png" alt="Messages">
             <span>Messages</span>
         </div>
+        <div class="icon" onclick="openWin('cat')">
+            <img src="/assets/cat.png" alt="Cat">
+            <span>Cat</span>
+        </div>
         <div class="icon" onclick="openWin('audio')">
             <img src="/assets/vhs.png" alt="Recordings">
             <span>Recordings</span>
@@ -452,6 +456,16 @@
             </div>
         </div>
         <div style="padding: 10px;"><audio controls style="width:100%; height:25px;"><source src="/assets/sample.wav" type="audio/wav"></audio></div>
+    </div>
+
+    <div class="window" id="win-cat" style="left: 140px; top: 180px; width: 360px;">
+        <div class="window-header" onmousedown="dragStart(event, 'win-cat')">
+            <span>Stella Idle</span>
+            <span onclick="closeWin('win-cat')" style="cursor:pointer">×</span>
+        </div>
+        <div style="padding: 12px; background: #fff; display:flex; justify-content:center;">
+            <img src="/assets/stellanyang-idle.png" alt="Stella Idle" style="max-width: 100%; height: auto;">
+        </div>
     </div>
 
     <script>
