@@ -318,26 +318,56 @@
         .contact-btn { display: inline-block; margin-top: 10px; padding: 8px 15px; background: var(--hot-pink); color: white; border: 1.5px solid var(--win-border); text-decoration: none; font-size: 11px; font-weight: bold; box-shadow: 3px 3px 0px #333; }
         .pet-btn {
             font-size: 24px;
-            background: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
+            background: #e7e7e7;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-            box-shadow: 2px 2px 0px #888;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            position: relative;
+            box-shadow:
+                -4px 0 0 0 #000,
+                4px 0 0 0 #000,
+                0 -4px 0 0 #000,
+                0 4px 0 0 #000,
+                inset -4px -4px 0 0 #888;
+            margin: 10px;
+            image-rendering: pixelated;
         }
         .pet-btn:hover {
-            background: #e0e0e0;
-            transform: scale(1.1);
+            background: #d1d1d1;
         }
         .pet-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0px 0px 0px #888;
+            transform: translate(2px, 2px);
+            box-shadow:
+                -4px 0 0 0 #000,
+                4px 0 0 0 #000,
+                0 -4px 0 0 #000,
+                0 4px 0 0 #000,
+                inset 2px 2px 0 0 #888;
         }
+        .pet-btn span { image-rendering: pixelated; }
+
+        @keyframes idleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes jumpAction {
+            0%, 100% { transform: scale(1, 1) translateY(0); }
+            30% { transform: scale(1.1, 0.9) translateY(0); }
+            50% { transform: scale(0.9, 1.2) translateY(-20px); }
+        }
+        #pet-image {
+            display: block;
+            image-rendering: pixelated;
+            transition: all 0.3s ease;
+            animation: idleFloat 3s ease-in-out infinite;
+        }
+        .anim-jump { animation: jumpAction 0.5s ease-out !important; }
 
         /* 动画修复 */
         @keyframes heartFly {
@@ -487,9 +517,9 @@
         </div>
         <div style="padding: 20px; background: #fff; display:flex; flex-direction: column; align-items: center;">
             <img id="pet-image" src="/assets/stellanyang-idle.png" alt="Stella" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 20px;">
-            <div class="pet-controls" style="display: flex; gap: 20px;">
-                <button class="pet-btn" onclick="feedPet()" title="喂食">🍭</button>
-                <button class="pet-btn" onclick="playGuitar()" title="弹吉他">🎸</button>
+            <div class="pet-controls" style="display: flex; gap: 15px; margin-top: 10px;">
+                <button class="pet-btn" onclick="feedPet()" title="喂食"><span>🍖</span></button>
+                <button class="pet-btn" onclick="playGuitar()" title="弹吉他"><span>🎸</span></button>
             </div>
         </div>
     </div>
@@ -650,10 +680,14 @@
             if (petImageElement) {
                 petImageElement.src = petImages[state];
                 petImageElement.alt = `Stella is ${state}`;
+                petImageElement.classList.remove('anim-jump');
+                void petImageElement.offsetWidth;
+                petImageElement.classList.add('anim-jump');
                 if (state !== 'idle') {
                     setTimeout(() => {
                         petImageElement.src = petImages.idle;
                         petImageElement.alt = 'Stella Idle';
+                        petImageElement.classList.remove('anim-jump');
                     }, duration);
                 }
             }
